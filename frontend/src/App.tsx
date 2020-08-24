@@ -3,18 +3,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import GlobalStyle from './styles/global';
 
-import ToastContainer from './components/ToastContainer';
-import { AuthProvider } from './hooks/AuthContext';
+import AppProvider from './hooks';
 
 import Routes from './routes';
 
 const App: React.FC = () => (
   <Router>
-    <AuthProvider>
+    <AppProvider>
       <Routes />
-    </AuthProvider>
-
-    <ToastContainer />
+    </AppProvider>
 
     <GlobalStyle />
   </Router>
