@@ -3,11 +3,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import GlobalStyle from './styles/global';
 
+import { AuthProvider } from './hooks/AuthContext';
+
 import Routes from './routes';
 
 const App: React.FC = () => (
   <Router>
-    <Routes />
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
 
     <GlobalStyle />
   </Router>
