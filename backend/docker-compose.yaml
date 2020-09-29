@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: personal_beauty
+    environment:
+      POSTGRES_DB: personal_beauty
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
