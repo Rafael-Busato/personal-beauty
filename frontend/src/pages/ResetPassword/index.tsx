@@ -3,7 +3,9 @@ import { FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+
+import api from '../../services/api';
 
 import { useToast } from '../../hooks/toast';
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -23,6 +25,7 @@ const ResetPassword: React.FC = () => {
 
   const { addToast } = useToast();
 
+  const location = useLocation();
   const history = useHistory();
 
   const handleSubmit = useCallback(
@@ -42,6 +45,25 @@ const ResetPassword: React.FC = () => {
           abortEarly: false,
         });
 
+        const { password, password_confirmation } = data;
+        const token = location.search.replace('?token=', '');
+
+        if (!token) {
+          throw new Error();
+        }
+
+        await api.post('/password/reset', {
+          password,
+          password_confirmation,
+          token,
+        });
+
+        addToast({
+          type: 'success',
+          title: 'Senha  alterada!',
+          description: 'Você já pode fazer seu login no Personal Beauty!',
+        });
+
         history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -59,7 +81,7 @@ const ResetPassword: React.FC = () => {
         });
       }
     },
-    [addToast, history],
+    [addToast, history, location.search],
   );
 
   return (

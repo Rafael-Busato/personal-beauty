@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import 'reflect-metadata';
+// import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
