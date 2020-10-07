@@ -191,22 +191,6 @@ const Dashboard: React.FC = () => {
             </NextAppointment>
           )}
 
-          <NextAppointment>
-            <strong>Agendamento a seguir</strong>
-            <div>
-              <img
-                src="https://avatars2.githubusercontent.com/u/64861571?s=460&v=4"
-                alt="leandro"
-              />
-
-              <strong>Leandro</strong>
-              <span>
-                <FiClock />
-                09:00
-              </span>
-            </div>
-          </NextAppointment>
-
           <Section>
             <strong>Manhã</strong>
 
