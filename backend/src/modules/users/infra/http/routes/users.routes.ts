@@ -20,6 +20,7 @@ usersRouter.post(
       name: Joi.string().required(),
       email: Joi.string().email().required(),
       city: Joi.string().required(),
+      occupation: Joi.string().required(),
       password: Joi.string().required(),
     },
   }),

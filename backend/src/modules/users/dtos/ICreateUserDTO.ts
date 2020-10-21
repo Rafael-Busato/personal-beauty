@@ -3,4 +3,5 @@ export default interface ICreateUserDTO {
   email: string;
   city: string;
   password: string;
+  occupation: string;
 }

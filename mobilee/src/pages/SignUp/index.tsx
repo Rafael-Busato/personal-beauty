@@ -93,8 +93,8 @@ const SignUp: React.FC = () => {
         enabled
       >
         <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flex: 1 }}
+          // keyboardShouldPersistTaps="handled"
+          // contentContainerStyle={{ flex: 1 }}
         >
           <Container>
             <Logo>Logo</Logo>
@@ -146,6 +146,63 @@ const SignUp: React.FC = () => {
                 onSubmitEditing={() => {
                   formRef.current?.submitForm();
                 }}
+              />
+               <Input
+                ref={passInputRef}
+                secureTextEntry
+                name="password"
+                icon="lock"
+                placeholder="Confirmar senha"
+                textContentType="newPassword"
+                returnKeyType="send"
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
+              />
+              <Input
+                ref={cityInputRef}
+                autoCapitalize="words"
+                name="city"
+                icon="map-pin"
+                placeholder="Celular"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+              />
+              <Input
+                ref={cityInputRef}
+                autoCapitalize="words"
+                name="city"
+                icon="map-pin"
+                placeholder="CEP"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+              />
+              <Input
+                ref={cityInputRef}
+                autoCapitalize="words"
+                name="city"
+                icon="map-pin"
+                placeholder="Bairro"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+              />
+              <Input
+                ref={cityInputRef}
+                autoCapitalize="words"
+                name="city"
+                icon="map-pin"
+                placeholder="Estado"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
+              />
+              <Input
+                ref={cityInputRef}
+                autoCapitalize="words"
+                name="city"
+                icon="map-pin"
+                placeholder="Rua"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInputRef.current?.focus()}
               />
               <Button
                 onPress={() => {

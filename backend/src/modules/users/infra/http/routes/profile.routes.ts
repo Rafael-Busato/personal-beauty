@@ -18,6 +18,7 @@ profileRouter.put(
       name: Joi.string().required(),
       email: Joi.string().email().required(),
       city: Joi.string(),
+      occupation: Joi.string(),
       old_password: Joi.string(),
       password: Joi.string(),
       password_confirmation: Joi.string().required().valid(Joi.ref('password')),

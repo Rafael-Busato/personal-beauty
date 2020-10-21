@@ -8,6 +8,7 @@ temp/
 ormconfig.json
 
 data
+dist
 
 tmp/*
 !tmp/.gitkeep

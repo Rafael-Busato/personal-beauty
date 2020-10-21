@@ -18,6 +18,21 @@ export const Content = styled.div`
 
   width: 100%;
   max-width: 700px;
+
+  .MuiPaper-root {
+    background-color: #312E38;
+  }
+
+  .MuiStepIcon-root.MuiStepIcon-active,
+  .MuiStepIcon-root.MuiStepIcon-completed {
+    color: #ff9000;
+  }
+
+  .MuiStepLabel-label,
+  .MuiStepLabel-label.MuiStepLabel-active,
+  .MuiStepLabel-label.MuiStepLabel-completed {
+    color: #fff;
+  }
 `;
 
 const appearFromRight = keyframes`
@@ -40,7 +55,7 @@ export const AnimationContainer = styled.div`
   animation: ${appearFromRight} 1s;
 
   form {
-    margin: 80px;
+    margin: 30px;
     width: 340px;
     text-align: center;
 

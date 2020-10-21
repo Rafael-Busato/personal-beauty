@@ -24,6 +24,9 @@ class User {
   city: string;
 
   @Column()
+  occupation: string;
+
+  @Column()
   @Exclude()
   password: string;
 
