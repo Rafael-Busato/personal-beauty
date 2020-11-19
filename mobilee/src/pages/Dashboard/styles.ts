@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { Provider } from './index';
 
@@ -31,6 +31,19 @@ export const UserName = styled.Text`
 `;
 
 export const ProfileButton = styled.TouchableOpacity``;
+
+export const WrapperHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const Filter = styled.TouchableOpacity``;
+
+export const FilterText = styled.Text`
+  font-size: 20px;
+  color: #fff;
+  font-family: 'RobotoSlab-Medium';
+`;
 
 export const UserAvatar = styled.Image`
   height: 56px;
@@ -85,4 +98,59 @@ export const ProviderMetaText = styled.Text`
   margin-left: 8px;
   color: #999591;
   font-family: 'RobotoSlab-Regular';
+`;
+
+export const ModalHeader = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 20px;
+`;
+
+export const ModalContainer = styled.View`
+  flex: 1;
+  padding: 5px 20px;
+  background-color: #fff;
+`;
+
+export const Input2 = styled.TextInput`
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border-width: 2px;
+  border-color: #232129;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  color: #232129;
+  font-size: 16px;
+  font-family: 'RobotoSlab-Regular';
+`;
+
+export const WrapperInput = styled.View`
+  height: 55px;
+  padding: 0 10px 0;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border-width: 2px;
+  border-color: #232129;
+
+  align-items: center;
+
+  color: #232129;
+  font-size: 16px;
+  font-family: 'RobotoSlab-Regular';
+`;
+
+export const ModalHeaderTitle = styled.Text`
+  color: #232129;
+  font-size: 20px;
+  font-family: 'RobotoSlab-Medium';
+  line-height: 28px;
 `;

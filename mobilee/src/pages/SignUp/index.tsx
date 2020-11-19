@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import {
   Image,
   View,
@@ -16,6 +16,8 @@ import * as Yup from 'yup';
 import api from '../../services/api';
 
 import getValidationErrors from '../../utils/getValidationErrors';
+import formatCEP from '../../utils/formatCEP';
+import formatPhone from '../../utils/formatPhone';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -34,11 +36,14 @@ interface SignUpFormData {
   name: string;
   email: string;
   password: string;
+  occupation: string;
 }
 
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+  const [cep, setCEP] = useState('');
+  const [phone, setPhone] = useState('');
 
   const emailInputRef = useRef<TextInput>(null);
   const cityInputRef = useRef<TextInput>(null);
@@ -46,6 +51,7 @@ const SignUp: React.FC = () => {
 
   const handleSignUp = useCallback(
     async (data: SignUpFormData) => {
+      console.log('data', data);
       try {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
@@ -61,6 +67,10 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
+        data.occupation = 'cliente';
+        delete data.a;
+        delete data.cep;
+
         console.log('data', data);
         await api.post('/users', data);
 
@@ -68,6 +78,7 @@ const SignUp: React.FC = () => {
 
         navigation.goBack();
       } catch (err) {
+        console.log('err', err.message);
         console.log('err', err);
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -93,8 +104,8 @@ const SignUp: React.FC = () => {
         enabled
       >
         <ScrollView
-          // keyboardShouldPersistTaps="handled"
-          // contentContainerStyle={{ flex: 1 }}
+        // keyboardShouldPersistTaps="handled"
+        // contentContainerStyle={{ flex: 1 }}
         >
           <Container>
             <Logo>Logo</Logo>
@@ -147,10 +158,10 @@ const SignUp: React.FC = () => {
                   formRef.current?.submitForm();
                 }}
               />
-               <Input
+              <Input
                 ref={passInputRef}
                 secureTextEntry
-                name="password"
+                name="a"
                 icon="lock"
                 placeholder="Confirmar senha"
                 textContentType="newPassword"
@@ -162,25 +173,29 @@ const SignUp: React.FC = () => {
               <Input
                 ref={cityInputRef}
                 autoCapitalize="words"
-                name="city"
+                name="a"
                 icon="map-pin"
                 placeholder="Celular"
+                onChangeText={(text) => setPhone(formatPhone(text))}
+                value={phone}
                 returnKeyType="next"
                 onSubmitEditing={() => emailInputRef.current?.focus()}
               />
               <Input
                 ref={cityInputRef}
                 autoCapitalize="words"
-                name="city"
+                name="cep"
                 icon="map-pin"
                 placeholder="CEP"
+                onChangeText={(text) => setCEP(formatCEP(text))}
+                value={cep}
                 returnKeyType="next"
                 onSubmitEditing={() => emailInputRef.current?.focus()}
               />
               <Input
                 ref={cityInputRef}
                 autoCapitalize="words"
-                name="city"
+                name="a"
                 icon="map-pin"
                 placeholder="Bairro"
                 returnKeyType="next"
@@ -189,7 +204,7 @@ const SignUp: React.FC = () => {
               <Input
                 ref={cityInputRef}
                 autoCapitalize="words"
-                name="city"
+                name="a"
                 icon="map-pin"
                 placeholder="Estado"
                 returnKeyType="next"
@@ -198,7 +213,7 @@ const SignUp: React.FC = () => {
               <Input
                 ref={cityInputRef}
                 autoCapitalize="words"
-                name="city"
+                name="a"
                 icon="map-pin"
                 placeholder="Rua"
                 returnKeyType="next"

@@ -4,7 +4,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import DayPicker, { DayModifiers } from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { FiPower, FiClock } from 'react-icons/fi';
 import { useAuth } from '../../hooks/auth';
@@ -34,11 +34,13 @@ interface Appointment {
   hourFormatted: string;
   user: {
     name: string;
+    email: string;
     avatar_url: string;
   };
 }
 
 const Dashboard: React.FC = () => {
+  const history = useHistory();
   const { signOut, user } = useAuth();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -58,6 +60,12 @@ const Dashboard: React.FC = () => {
 
   const handleMonthChange = useCallback((month: Date) => {
     setCurrentMonth(month);
+  }, []);
+
+  useEffect(() => {
+    if (user.email === 'admin@gmail.com') {
+      history.push('/admin');
+    }
   }, []);
 
   useEffect(() => {

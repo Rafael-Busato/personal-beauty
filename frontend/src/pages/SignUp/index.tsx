@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiMail, FiUser, FiLock, FiArrowLeft } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -32,6 +32,7 @@ interface SignUpFormData {
   email: string;
   password: string;
   phone: string;
+  occupation: string;
   profession: string;
   address: IAddress;
 }
@@ -41,7 +42,7 @@ const SignUp: React.FC = () => {
   const { addToast } = useToast();
   const history = useHistory();
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -53,6 +54,7 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
+      console.log('data', data);
       try {
         formRef.current?.setErrors({});
 
@@ -63,7 +65,7 @@ const SignUp: React.FC = () => {
             .email('Digite um e-mail válido'),
           password: Yup.string().min(6, 'No mínimo 6 dígitos'),
           // phone: Yup.string().required('Celular obrigatório'),
-          occupation: Yup.string().required('Profissão obrigatória'),
+          // occupation: Yup.string().required('Profissão obrigatória'),
           // zipCode: Yup.string().required('CEP obrigatório'),
           // city: Yup.string().required('Cidade obrigatória'),
           // neighborhood: Yup.string().required('Bairro obrigatório'),
@@ -76,6 +78,8 @@ const SignUp: React.FC = () => {
           // document: Yup.string().required('Documento obrigatório'),
           // fullname: Yup.string().required('Nome completo obrigatória'),
         });
+
+        data.occupation = 'Manicure';
 
         await schema.validate(data, {
           abortEarly: false,
@@ -134,7 +138,13 @@ const SignUp: React.FC = () => {
                 <Input name="bank" icon={FiUser} placeholder="Banco" />
                 <Input name="agency" icon={FiUser} placeholder="Agência" />
                 <Input name="account" icon={FiUser} placeholder="Conta" />
-                <Input name="document" icon={FiUser} placeholder="CPF" />
+                <Input
+                  name="document"
+                  hasMask
+                  icon={FiUser}
+                  placeholder="CPF"
+                  mask="999.999.999-99"
+                />
                 <Input
                   name="fullname"
                   icon={FiUser}
@@ -145,7 +155,13 @@ const SignUp: React.FC = () => {
 
             {activeStep === 1 && (
               <>
-                <Input name="zipCode" icon={FiUser} placeholder="CEP" />
+                <Input
+                  name="zipCode"
+                  icon={FiUser}
+                  placeholder="CEP"
+                  hasMask
+                  mask="99999-999"
+                />
                 <Input name="neighborhood" icon={FiUser} placeholder="Bairro" />
                 <Input name="state" icon={FiUser} placeholder="Estado" />
                 <Input name="address" icon={FiUser} placeholder="Rua" />
@@ -171,11 +187,23 @@ const SignUp: React.FC = () => {
                   placeholder="Confirmar Senha"
                 />
                 {/* <Input name="phone" icon={FiMail} placeholder="Celular" /> */}
-                <Input
+                {/* <Input
                   name="occupation"
                   icon={FiMail}
                   placeholder="Profissão"
+                /> */}
+                <input
+                  name="occupation"
+                  type="checkbox"
+                  // checked={this.state.isGoing}
+                  // onChange={this.handleInputChange}
                 />
+                <select name="occupation" id="occupation">
+                  <option value="Cabeleireiro">Cabeleireiro</option>
+                  <option value="Barbeiro">Barbeiro</option>
+                  <option value="Manicure">Manicure</option>
+                  <option value="Pedicure">Pedicure</option>
+                </select>
               </>
             )}
 

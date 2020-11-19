@@ -159,3 +159,60 @@ export const CreateAppointmentButtonText = styled.Text`
   font-size: 18px;
   color: #232129;
 `;
+
+export const ModalContainer = styled.View`
+  flex: 1;
+  padding: 5px 20px;
+`;
+
+export const ModalTitle = styled.Text`
+  color: #232129;
+  font-size: 20px;
+  font-family: 'RobotoSlab-Medium';
+  line-height: 28px;
+`;
+
+export const ModalDescription = styled.Text`
+  color: #232129;
+  margin-bottom: 20px;
+`;
+
+export const Input2 = styled.TextInput`
+  width: 100%;
+  height: 60px;
+  padding: 0 16px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border-width: 2px;
+  border-color: #232129;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  color: #232129;
+  font-size: 16px;
+  font-family: 'RobotoSlab-Regular';
+`;
+
+export const ModalHeader = styled.View`
+  padding: 20px;
+`;
+
+export const ErrorMessage = styled.Text`
+  color: red;
+`;
+
+export const ModalContent = styled.View`
+  padding: 10px 0;
+`;
+
+export const Card = styled.TouchableOpacity`
+  border: solid 1px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+`;
+
+export const CardNumber = styled.Text``;

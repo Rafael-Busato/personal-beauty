@@ -20,7 +20,7 @@ export const Content = styled.div`
   max-width: 700px;
 
   .MuiPaper-root {
-    background-color: #312E38;
+    background-color: #312e38;
   }
 
   .MuiStepIcon-root.MuiStepIcon-active,
@@ -73,6 +73,21 @@ export const AnimationContainer = styled.div`
       &:hover {
         color: ${shade(0.2, '#f4ede8')};
       }
+    }
+
+    select {
+      font-size: 16px;
+      margin-top: 10px;
+      background: #232129;
+      border-radius: 10px;
+      padding: 16px;
+      width: 100%;
+
+      border: 2px solid #232129;
+      color: #666360;
+
+      display: flex;
+      align-items: center;
     }
   }
 
