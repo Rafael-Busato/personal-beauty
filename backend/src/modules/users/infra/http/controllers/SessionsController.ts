@@ -9,11 +9,12 @@ export default class SessionsController {
     const { email, password } = request.body;
 
     const authenticateUser = container.resolve(AuthenticateUserService);
-
     const { user, token } = await authenticateUser.execute({
       email,
       password,
     });
+
+    console.log('ola')
 
     return response.json({ user: classToClass(user), token });
   }

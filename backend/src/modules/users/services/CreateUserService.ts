@@ -39,12 +39,10 @@ class CreateUserService {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
-    const cityToLowercase = city.toLowerCase();
-
     const user = await this.usersRepository.create({
       name,
       email,
-      city: cityToLowercase,
+      city: city.toLowerCase(),
       occupation,
       password: hashedPassword,
     });

@@ -42,7 +42,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const signIn = useCallback(async ({ email, password }) => {
     const response = await api.post('/sessions', { email, password });
-
+    console.log('signIn',response);
     const { token, user } = response.data;
 
     localStorage.setItem('@PersonalBeauty:token', token);

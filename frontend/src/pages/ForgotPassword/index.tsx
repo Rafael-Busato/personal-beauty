@@ -5,7 +5,7 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { FiLogIn, FiMail } from 'react-icons/fi';
 
@@ -29,8 +29,6 @@ const ForgotPassword: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { addToast } = useToast();
-
-  const history = useHistory();
 
   const handleSubmit = useCallback(
     async (data: ForgotPasswordFormData) => {

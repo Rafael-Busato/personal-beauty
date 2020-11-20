@@ -84,7 +84,6 @@ const SignUp: React.FC = () => {
         await schema.validate(data, {
           abortEarly: false,
         });
-
         await api.post('/users', data);
 
         history.push('/');
@@ -95,6 +94,7 @@ const SignUp: React.FC = () => {
           description: 'Você já pode fazer seu login no Personal Beauty!',
         });
       } catch (err) {
+        console.log('erro ', err);
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
 
