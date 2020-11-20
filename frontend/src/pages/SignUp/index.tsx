@@ -123,53 +123,17 @@ const SignUp: React.FC = () => {
 
             <Stepper activeStep={activeStep} alternativeLabel>
               <Step>
-                <StepLabel>Conta de recebimento</StepLabel>
+                <StepLabel>Dados pessoais</StepLabel>
               </Step>
               <Step>
                 <StepLabel>Endereço</StepLabel>
               </Step>
               <Step>
-                <StepLabel>Dados pessoais</StepLabel>
+                <StepLabel>Conta de recebimento</StepLabel>
               </Step>
             </Stepper>
 
             {activeStep === 0 && (
-              <>
-                <Input name="bank" icon={FiUser} placeholder="Banco" />
-                <Input name="agency" icon={FiUser} placeholder="Agência" />
-                <Input name="account" icon={FiUser} placeholder="Conta" />
-                <Input
-                  name="document"
-                  hasMask
-                  icon={FiUser}
-                  placeholder="CPF"
-                  mask="999.999.999-99"
-                />
-                <Input
-                  name="fullname"
-                  icon={FiUser}
-                  placeholder="Nome Completo"
-                />
-              </>
-            )}
-
-            {activeStep === 1 && (
-              <>
-                <Input
-                  name="zipCode"
-                  icon={FiUser}
-                  placeholder="CEP"
-                  hasMask
-                  mask="99999-999"
-                />
-                <Input name="neighborhood" icon={FiUser} placeholder="Bairro" />
-                <Input name="state" icon={FiUser} placeholder="Estado" />
-                <Input name="address" icon={FiUser} placeholder="Rua" />
-                <Input name="number" icon={FiUser} placeholder="Número" />
-              </>
-            )}
-
-            {activeStep === 2 && (
               <>
                 <Input name="name" icon={FiUser} placeholder="Nome" />
                 <Input name="email" icon={FiMail} placeholder="E-mail" />
@@ -204,6 +168,42 @@ const SignUp: React.FC = () => {
                   <option value="Manicure">Manicure</option>
                   <option value="Pedicure">Pedicure</option>
                 </select>
+              </>
+            )}
+
+            {activeStep === 1 && (
+              <>
+                <Input
+                  name="zipCode"
+                  icon={FiUser}
+                  placeholder="CEP"
+                  hasMask
+                  mask="99999-999"
+                />
+                <Input name="neighborhood" icon={FiUser} placeholder="Bairro" />
+                <Input name="state" icon={FiUser} placeholder="Estado" />
+                <Input name="address" icon={FiUser} placeholder="Rua" />
+                <Input name="number" icon={FiUser} placeholder="Número" />
+              </>
+            )}
+
+            {activeStep === 2 && (
+              <>
+                <Input name="bank" icon={FiUser} placeholder="Banco" />
+                <Input name="agency" icon={FiUser} placeholder="Agência" />
+                <Input name="account" icon={FiUser} placeholder="Conta" />
+                <Input
+                  name="document"
+                  hasMask
+                  icon={FiUser}
+                  placeholder="CPF"
+                  mask="999.999.999-99"
+                />
+                <Input
+                  name="fullname"
+                  icon={FiUser}
+                  placeholder="Nome Completo"
+                />
               </>
             )}
 
