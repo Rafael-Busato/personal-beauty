@@ -26,10 +26,69 @@ export default class CreateUsers1597775383307 implements MigrationInterface {
             name: 'occupation',
             type: 'varchar',
           },
+
+          {
+            name: 'zipCode',
+            type: 'varchar',
+          },
+          {
+            name: 'state',
+            type: 'varchar',
+          },
           {
             name: 'city',
             type: 'varchar',
           },
+          {
+            name: 'neighborhood',
+            type: 'varchar',
+          },
+          {
+            name: 'address',
+            type: 'varchar',
+          },
+          {
+            name: 'number',
+            type: 'varchar',
+          },
+
+          {
+            name: 'bank',
+            type: 'varchar',
+          },
+          {
+            name: 'agency',
+            type: 'varchar',
+          },
+          {
+            name: 'account',
+            type: 'varchar',
+          },
+          {
+            name: 'document',
+            type: 'varchar',
+          },
+          {
+            name: 'fullname',
+            type: 'varchar',
+          },
+
+          {
+            name: 'service_type',
+            type: 'varchar',
+            isArray: true,
+          },
+          {
+            name: 'sub_service',
+            type: 'varchar',
+            isArray: true,
+          },
+
+          {
+            name: 'price',
+            type: 'varchar',
+          },
+
           {
             name: 'password',
             type: 'varchar',

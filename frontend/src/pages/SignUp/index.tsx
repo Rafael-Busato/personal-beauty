@@ -35,6 +35,7 @@ interface SignUpFormData {
   occupation: string;
   profession: string;
   address: IAddress;
+  bank: string;
 }
 
 const SignUp: React.FC = () => {
@@ -44,7 +45,10 @@ const SignUp: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
+  const [formData, setFormData] = useState();
+
+  const handleNext = (data: any) => {
+    console.log('ollaaa', data);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -54,61 +58,66 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
-      console.log('data', data);
-      try {
-        formRef.current?.setErrors({});
+      setFormData({ ...formData, ...data });
 
-        const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
-          email: Yup.string()
-            .required('E-mail obrigatório')
-            .email('Digite um e-mail válido'),
-          password: Yup.string().min(6, 'No mínimo 6 dígitos'),
-          // phone: Yup.string().required('Celular obrigatório'),
-          // occupation: Yup.string().required('Profissão obrigatória'),
-          // zipCode: Yup.string().required('CEP obrigatório'),
-          // city: Yup.string().required('Cidade obrigatória'),
-          // neighborhood: Yup.string().required('Bairro obrigatório'),
-          // state: Yup.string().required('Estado obrigatório'),
-          // address: Yup.string().required('Rua obrigatória'),
-          // number: Yup.string().required('Número obrigatória'),
-          // bank: Yup.string().required('Banco obrigatório'),
-          // agency: Yup.string().required('Agência obrigatória'),
-          // account: Yup.string().required('Conta obrigatória'),
-          // document: Yup.string().required('Documento obrigatório'),
-          // fullname: Yup.string().required('Nome completo obrigatória'),
-        });
+      if (activeStep <= 2) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        return;
+      }
 
-        data.occupation = 'Manicure';
+      if (activeStep === 3) {
+        try {
+          formRef.current?.setErrors({});
 
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-        await api.post('/users', data);
+          const schema = Yup.object().shape({
+            name: Yup.string().required('Nome obrigatório'),
+            email: Yup.string()
+              .required('E-mail obrigatório')
+              .email('Digite um e-mail válido'),
+            password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+            // phone: Yup.string().required('Celular obrigatório'),
+            // occupation: Yup.string().required('Profissão obrigatória'),
+            // zipCode: Yup.string().required('CEP obrigatório'),
+            // city: Yup.string().required('Cidade obrigatória'),
+            // neighborhood: Yup.string().required('Bairro obrigatório'),
+            // state: Yup.string().required('Estado obrigatório'),
+            // address: Yup.string().required('Rua obrigatória'),
+            // number: Yup.string().required('Número obrigatória'),
+            // bank: Yup.string().required('Banco obrigatório'),
+            // agency: Yup.string().required('Agência obrigatória'),
+            // account: Yup.string().required('Conta obrigatória'),
+            // document: Yup.string().required('Documento obrigatório'),
+            // fullname: Yup.string().required('Nome completo obrigatória'),
+          });
 
-        history.push('/');
+          await schema.validate(data, {
+            abortEarly: false,
+          });
+          await api.post('/users', formData);
 
-        addToast({
-          type: 'success',
-          title: 'Cadastro realizado!',
-          description: 'Você já pode fazer seu login no Personal Beauty!',
-        });
-      } catch (err) {
-        console.log('erro ', err);
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
+          history.push('/');
+          addToast({
+            type: 'success',
+            title: 'Cadastro realizado!',
+            description: 'Você já pode fazer seu login no Personal Beauty!',
+          });
+        } catch (err) {
+          console.log('erro ', err);
+          if (err instanceof Yup.ValidationError) {
+            const errors = getValidationErrors(err);
 
-          formRef.current?.setErrors(errors);
+            formRef.current?.setErrors(errors);
+          }
+
+          addToast({
+            type: 'error',
+            title: 'Erro no cadastro',
+            description: 'Ocorreu um erro ao fazer cadastro, tente novamente',
+          });
         }
-
-        addToast({
-          type: 'error',
-          title: 'Erro no cadastro',
-          description: 'Ocorreu um erro ao fazer cadastro, tente novamente',
-        });
       }
     },
-    [addToast, history],
+    [addToast, history, formData],
   );
 
   return (
@@ -131,13 +140,15 @@ const SignUp: React.FC = () => {
               <Step>
                 <StepLabel>Conta de recebimento</StepLabel>
               </Step>
+              <Step>
+                <StepLabel>Tipo de Serviços</StepLabel>
+              </Step>
             </Stepper>
 
             {activeStep === 0 && (
               <>
                 <Input name="name" icon={FiUser} placeholder="Nome" />
                 <Input name="email" icon={FiMail} placeholder="E-mail" />
-                <Input name="city" icon={FiUser} placeholder="Cidade" />
                 <Input
                   name="password"
                   icon={FiLock}
@@ -180,8 +191,9 @@ const SignUp: React.FC = () => {
                   hasMask
                   mask="99999-999"
                 />
-                <Input name="neighborhood" icon={FiUser} placeholder="Bairro" />
                 <Input name="state" icon={FiUser} placeholder="Estado" />
+                <Input name="city" icon={FiUser} placeholder="Cidade" />
+                <Input name="neighborhood" icon={FiUser} placeholder="Bairro" />
                 <Input name="address" icon={FiUser} placeholder="Rua" />
                 <Input name="number" icon={FiUser} placeholder="Número" />
               </>
@@ -207,16 +219,24 @@ const SignUp: React.FC = () => {
               </>
             )}
 
+            {activeStep === 3 && (
+              <>
+                <Input
+                  name="price"
+                  hasMask
+                  icon={FiUser}
+                  placeholder="Preço"
+                  mask="999.999.999-99"
+                />
+              </>
+            )}
+
             <div>
-              {activeStep <= 1 && (
-                <Button onClick={handleNext} type="button">
-                  Avançar
-                </Button>
-              )}
+              {activeStep <= 2 && <Button type="submit">Avançar</Button>}
               <Button disabled={activeStep === 0} onClick={handleBack}>
                 Voltar
               </Button>
-              {activeStep === 2 && <Button type="submit">Cadastrar</Button>}
+              {activeStep === 3 && <Button type="submit">Cadastrar</Button>}
             </div>
           </Form>
 
