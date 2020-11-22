@@ -15,27 +15,38 @@ import getValidationErrors from '../../utils/getValidationErrors';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import CheckBox from '../../components/CheckBox';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 
-interface IAddress {
-  city: string;
-  neighborhood: string;
-  state: string;
-  zipCode: string;
-  address: string;
-}
+// interface IAddress {
+//   city: string;
+//   neighborhood: string;
+//   state: string;
+//   zipCode: string;
+//   address: string;
+// }
 
 interface SignUpFormData {
   name: string;
   city: string;
   email: string;
   password: string;
+
+  bank: string;
   phone: string;
   occupation: string;
-  profession: string;
-  address: IAddress;
-  bank: string;
+  zipCode: string;
+  neighborhood: string;
+  state: string;
+  address: string;
+  number: string;
+  agency: string;
+  account: string;
+  document: string;
+  fullname: string;
+  serviceType: object;
+  subService: string;
 }
 
 const SignUp: React.FC = () => {
@@ -45,10 +56,40 @@ const SignUp: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  const [formData, setFormData] = useState();
+  const [serviceType, setServiceType] = useState({
+    cabeleleiro: false,
+    unha: false,
+  });
+
+  const handleChangeCheckBox = (event: any) => {
+    setServiceType({
+      ...serviceType,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const [formData, setFormData] = useState<SignUpFormData>({
+    name: '',
+    city: '',
+    email: '',
+    password: '',
+    bank: '',
+    phone: '',
+    occupation: '',
+    zipCode: '',
+    neighborhood: '',
+    state: '',
+    address: '',
+    number: '',
+    agency: '',
+    account: '',
+    document: '',
+    fullname: '',
+    serviceType: {},
+    subService: '',
+  });
 
   const handleNext = (data: any) => {
-    console.log('ollaaa', data);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -66,15 +107,16 @@ const SignUp: React.FC = () => {
       }
 
       if (activeStep === 3) {
+        formData.serviceType = serviceType;
         try {
           formRef.current?.setErrors({});
 
           const schema = Yup.object().shape({
-            name: Yup.string().required('Nome obrigatório'),
-            email: Yup.string()
-              .required('E-mail obrigatório')
-              .email('Digite um e-mail válido'),
-            password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+            // name: Yup.string().required('Nome obrigatório'),
+            // email: Yup.string()
+            //   .required('E-mail obrigatório')
+            //   .email('Digite um e-mail válido'),
+            // password: Yup.string().min(6, 'No mínimo 6 dígitos'),
             // phone: Yup.string().required('Celular obrigatório'),
             // occupation: Yup.string().required('Profissão obrigatória'),
             // zipCode: Yup.string().required('CEP obrigatório'),
@@ -90,9 +132,10 @@ const SignUp: React.FC = () => {
             // fullname: Yup.string().required('Nome completo obrigatória'),
           });
 
-          await schema.validate(data, {
+          await schema.validate(formData, {
             abortEarly: false,
           });
+
           await api.post('/users', formData);
 
           history.push('/');
@@ -117,7 +160,7 @@ const SignUp: React.FC = () => {
         }
       }
     },
-    [addToast, history, formData],
+    [addToast, history, formData, serviceType, activeStep],
   );
 
   return (
@@ -218,16 +261,37 @@ const SignUp: React.FC = () => {
                 />
               </>
             )}
-
             {activeStep === 3 && (
               <>
-                <Input
-                  name="price"
-                  hasMask
-                  icon={FiUser}
-                  placeholder="Preço"
-                  mask="999.999.999-99"
-                />
+                <div>
+                  <div>
+                    <CheckBox
+                      label="Cabeleleiro"
+                      checked={serviceType.cabeleleiro}
+                      onChange={handleChangeCheckBox}
+                      id="scales"
+                      name="cabeleleiro"
+                    />
+                  </div>
+                  {serviceType.cabeleleiro && (
+                    <div style={{ display: 'flex' }}>
+                      <div>
+                        <CheckBox
+                          label="Corte"
+                          checked={serviceType.unha}
+                          onChange={handleChangeCheckBox}
+                          id="scales"
+                          name="unha"
+                        />
+                      </div>
+                      {serviceType.unha && (
+                        <div>
+                          <Input name="name" icon={FiUser} placeholder="Nome" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </>
             )}
 

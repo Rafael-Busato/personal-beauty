@@ -5,20 +5,21 @@ import CreateUserService from '@modules/users/services/CreateUserService';
 
 export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, email, city, occupation, password } = request.body;
+    const data = request.body;
 
-    const createUser = container.resolve(CreateUserService);
+    console.log('data', data);
+    // const createUser = container.resolve(CreateUserService);
 
-    const user = await createUser.execute({
-      name,
-      email,
-      city,
-      occupation,
-      password,
-    });
+    // const user = await createUser.execute({
+    //   name,
+    //   email,
+    //   city,
+    //   occupation,
+    //   password,
+    // });
 
-    delete user.password;
+    // delete user.password;
 
-    return response.json(user);
+    return response.json(true);
   }
 }

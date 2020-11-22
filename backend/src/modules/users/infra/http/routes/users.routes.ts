@@ -15,15 +15,15 @@ const upload = multer(uploadConfig);
 
 usersRouter.post(
   '/',
-  celebrate({
-    [Segments.BODY]: {
-      name: Joi.string().required(),
-      email: Joi.string().email().required(),
-      city: Joi.string().required(),
-      occupation: Joi.string(),
-      password: Joi.string().required(),
-    },
-  }),
+  // celebrate({
+  //   [Segments.BODY]: {
+  //     name: Joi.string().required(),
+  //     email: Joi.string().email().required(),
+  //     city: Joi.string().required(),
+  //     occupation: Joi.string(),
+  //     password: Joi.string().required(),
+  //   },
+  // }),
   usersController.create,
 );
 
