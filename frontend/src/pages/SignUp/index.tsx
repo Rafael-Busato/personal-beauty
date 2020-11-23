@@ -46,7 +46,7 @@ interface SignUpFormData {
   document: string;
   fullname: string;
   serviceType: object;
-  subService: string;
+  subService: object;
 }
 
 const SignUp: React.FC = () => {
@@ -56,17 +56,15 @@ const SignUp: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  const [serviceType, setServiceType] = useState({
-    cabeleleiro: false,
+  const [subService, setSubService] = useState({
+    corte: false,
     unha: false,
   });
 
-  const handleChangeCheckBox = (event: any) => {
-    setServiceType({
-      ...serviceType,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  const [serviceType, setServiceType] = useState({
+    cabeleleiro: false,
+    manicure: false,
+  });
 
   const [formData, setFormData] = useState<SignUpFormData>({
     name: '',
@@ -86,7 +84,7 @@ const SignUp: React.FC = () => {
     document: '',
     fullname: '',
     serviceType: {},
-    subService: '',
+    subService: {},
   });
 
   const handleNext = (data: any) => {
@@ -95,6 +93,20 @@ const SignUp: React.FC = () => {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleChangeServiceType = (event: any) => {
+    setServiceType({
+      ...serviceType,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const handleChangeSubService = (event: any) => {
+    setSubService({
+      ...subService,
+      [event.target.name]: event.target.checked,
+    });
   };
 
   const handleSubmit = useCallback(
@@ -108,6 +120,7 @@ const SignUp: React.FC = () => {
 
       if (activeStep === 3) {
         formData.serviceType = serviceType;
+        formData.subService = subService;
         try {
           formRef.current?.setErrors({});
 
@@ -160,7 +173,7 @@ const SignUp: React.FC = () => {
         }
       }
     },
-    [addToast, history, formData, serviceType, activeStep],
+    [addToast, history, formData, serviceType, subService, activeStep],
   );
 
   return (
@@ -268,7 +281,7 @@ const SignUp: React.FC = () => {
                     <CheckBox
                       label="Cabeleleiro"
                       checked={serviceType.cabeleleiro}
-                      onChange={handleChangeCheckBox}
+                      onChange={handleChangeServiceType}
                       id="scales"
                       name="cabeleleiro"
                     />
@@ -278,13 +291,13 @@ const SignUp: React.FC = () => {
                       <div>
                         <CheckBox
                           label="Corte"
-                          checked={serviceType.unha}
-                          onChange={handleChangeCheckBox}
+                          checked={subService.corte}
+                          onChange={handleChangeSubService}
                           id="scales"
-                          name="unha"
+                          name="corte"
                         />
                       </div>
-                      {serviceType.unha && (
+                      {subService.corte && (
                         <div>
                           <Input name="name" icon={FiUser} placeholder="Nome" />
                         </div>

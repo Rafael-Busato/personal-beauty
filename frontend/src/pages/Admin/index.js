@@ -1,11 +1,21 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 
 import { uuid } from 'uuidv4';
+
+import { Form } from '@unform/web';
 
 import { Link } from 'react-router-dom';
 
 import { FiPower } from 'react-icons/fi';
 import { useAuth } from '../../hooks/auth';
+
+import Input from '../../components/Input';
 
 import api from '../../services/api';
 
@@ -22,10 +32,11 @@ import {
   WrapperInput,
   Services,
 } from './styles';
-import { date } from 'yup';
 
 function Admin() {
   const { signOut, user } = useAuth();
+
+  const formRef = useRef(null);
 
   const [listServices, setListServices] = useState([]);
   const [listSubServices, setListSubServices] = useState([]);
@@ -39,9 +50,8 @@ function Admin() {
   useEffect(() => {
     async function getServicesTypes() {
       const { data } = await api.get('service/listServicesType');
-      console.log('DATA', data);
       setListServices(data);
-      setListSubServices(data);
+      // setListSubServices(data);
     }
 
     getServicesTypes();
@@ -76,29 +86,37 @@ function Admin() {
     setTextService('');
   }, [services, setServices, textService]);
 
-  const handleAddNewSubService = useCallback(async (id) => {
-    const { data } = await api.get(`service/specificSubService/${id}`);
+  const handleAddNewSubService = useCallback(
+    async (id) => {
+      const { data: response } = await api.get(
+        `service/specificSubService/3036428f-322e-4fe6-aaa8-4063d45c4304`,
+      );
 
-    const newSub = [
-      data.sub_servicer,
-      {
-        id: uuid(),
-        sub_services: textSubService,
-        active: true,
-        update_at: new Date(),
-        created_at: new Date(),
-      },
-    ];
-    // console.log('NEW SUB', newSub);
-    return;
-    const response = await api.put(`service/subServices/${id}`, {
-      new_sub_service: newSub,
-    });
+      const newSub = [
+        ...response.sub_service,
+        {
+          id: uuid(),
+          sub_services: Object.values(id)[0],
+          active: true,
+          update_at: new Date(),
+          created_at: new Date(),
+        },
+      ];
+      const responseApi = await api.put(
+        `service/subServices/${Object.keys(id)[0]}`,
+        {
+          new_sub_service: newSub,
+        },
+      );
 
-    let newSubService = JSON.parse(response.data.sub_service[0]);
+      console.log('resposta', responseApi);
 
-    setListSubServices([listSubServices, newSubService.sub_services]);
-  }, []);
+      // let newSubService = JSON.parse(response.data.sub_service[0]);
+
+      // setListSubServices([listSubServices, newSubService.sub_services]);
+    },
+    [textSubService],
+  );
 
   const handleServices = useCallback((item) => {
     const a = services.findIndex((element) => element.id === item.id);
@@ -168,56 +186,64 @@ function Admin() {
           </WrapperInput>
 
           <Services>
-            {listServices.map((item) => (
-              <>
-                <div key={item.id}>
-                  <p>{item.service_type}</p>
-                  <span onClick={() => handleServices(item)}>
-                    {item.active ? 'desativar' : 'ativar'}
-                  </span>
-                </div>
+            {listServices.map((item, index) => {
+              console.log('item', item);
+              return (
+                <Form
+                  ref={formRef}
+                  key={index}
+                  onSubmit={handleAddNewSubService}
+                >
+                  <div>
+                    <div>
+                      <p>{item.service_type}</p>
+                      <span onClick={() => handleServices(item)}>
+                        {item.active ? 'desativar' : 'ativar'}
+                      </span>
+                    </div>
+                    <h1 style={{ fontSize: 16, margin: '20px 0 10px 0' }}>
+                      Sub Serviços
+                    </h1>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {item.sub_service.map((item) => {
+                          console.log('sub service item MAP', JSON.parse(item));
 
-                {/* Titulo do serviço */}
-
-                <h1 style={{ fontSize: 16, margin: '20px 0 10px 0' }}>
-                  Sub Serviços
-                </h1>
-
-                {/* Titulo do serviço */}
-
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {/* CONTAINER DA LISTA DO SUB SERVIÇO  */}
-
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    {handleMapSubService(item)}
+                          const teste = JSON.parse(item);
+                          return (
+                            <div
+                              style={{ display: 'flex', marginTop: 5 }}
+                              key={teste.id}
+                            >
+                              <p>{teste.sub_services}</p>
+                              <span
+                              // onClick={() => handleSubServices(service.id)}
+                              >
+                                {teste.active ? 'desativar' : 'ativar'}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div style={{ marginTop: 12 }}>
+                        <Input name={(item.service_type, item.id)} />
+                        <button
+                          style={{
+                            marginLeft: 0,
+                            marginTop: 10,
+                            width: 150,
+                            height: 45,
+                          }}
+                          type="submit"
+                        >
+                          Adicionar
+                        </button>
+                      </div>
+                    </div>
                   </div>
-
-                  {/* CONTAINER DA LISTA DO SUB SERVIÇO  */}
-
-                  {/* BOTÃO E INPUT PARA ADICIONAR NOVO SUB-SERVIÇO */}
-                  <div style={{ marginTop: 12 }}>
-                    <input
-                      value={textSubService}
-                      onChange={(event) =>
-                        setTextSubService(event.target.value)
-                      }
-                    />
-                    <button
-                      style={{
-                        marginLeft: 0,
-                        marginTop: 10,
-                        width: 150,
-                        height: 45,
-                      }}
-                      onClick={() => handleAddNewSubService(item.id)}
-                    >
-                      Adicionar
-                    </button>
-                  </div>
-                  {/* BOTÃO PARA ADICIONAR NOVO SUB-SERVIÇO */}
-                </div>
-              </>
-            ))}
+                </Form>
+              );
+            })}
           </Services>
         </TypeOfServices>
       </Content>

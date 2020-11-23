@@ -22,11 +22,11 @@ export default class CreateServicesTypes {
 
     const listServiceTypes = await ProviderServiceTypes.index();
 
-    listServiceTypes.forEach(service => {
-      let parsed = JSON.parse(service.sub_service);
+    // listServiceTypes.forEach(service => {
+    //   let parsed = JSON.parse(service.sub_service);
 
-      return (service.sub_service = parsed);
-    });
+    //   return (service.sub_service = parsed);
+    // });
 
     return response.json(listServiceTypes);
   }
@@ -37,8 +37,6 @@ export default class CreateServicesTypes {
     const ProviderServiceTypes = container.resolve(ListProviderServiceTypes);
 
     let specificSubService = await ProviderServiceTypes.show(id);
-
-    specificSubService.sub_service = JSON.parse(specificSubService.sub_service);
 
     return response.json(specificSubService);
   }

@@ -32,6 +32,8 @@ class CreateServiceType {
 
   public async show(id: string): Promise<ServicesTypes> {
     const specificSubService = await this.servicesTypesRepository.show(id);
+
+    console.log(specificSubService);
     return specificSubService;
   }
 
@@ -47,15 +49,7 @@ class CreateServiceType {
     const serviceType = await this.servicesTypesRepository.create({
       service_type,
       active: true,
-      sub_service: [
-        {
-          id: uuid(),
-          sub_services: '',
-          active: false,
-          created_at: new Date(),
-          update_at: new Date(),
-        },
-      ],
+      sub_service: [],
     });
 
     return serviceType;
@@ -63,19 +57,17 @@ class CreateServiceType {
 
   public async createSubServices({
     new_sub_service,
-
     id,
   }: IRequestSubService): Promise<ServicesTypes> {
     let findSubServices = await this.servicesTypesRepository.findById(id);
 
-    let subServiceParsed = JSON.parse(findSubServices.sub_service);
+    const teste = [...findSubServices.sub_service, ...new_sub_service];
 
-    subServiceParsed.sub_services = new_sub_service;
-    findSubServices.sub_service = [JSON.stringify(subServiceParsed)];
+    findSubServices.sub_service = teste;
 
     await this.servicesTypesRepository.save(findSubServices);
 
-    return findSubServices;
+    return true;
   }
 }
 

@@ -18,7 +18,7 @@ class Appointment {
   @Column('text', {
     array: true,
   })
-  sub_service: [string];
+  sub_service: [];
 
   @Column()
   active: boolean;

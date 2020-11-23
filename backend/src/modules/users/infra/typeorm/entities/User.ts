@@ -25,6 +25,45 @@ class User {
 
   @Column()
   occupation: string;
+  @Column()
+  bank: string;
+
+  @Column()
+  phone: string;
+  @Column()
+  zipCode: string;
+  @Column()
+  neighborhood: string;
+
+  @Column()
+  state: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  number: string;
+
+  @Column()
+  agency: string;
+
+  @Column()
+  account: string;
+
+  @Column()
+  document: string;
+
+  @Column()
+  fullname: string;
+
+  @Column()
+  price: string;
+
+  @Column({ array: true })
+  service_type: string;
+
+  @Column({ array: true })
+  sub_service: string;
 
   @Column()
   @Exclude()
