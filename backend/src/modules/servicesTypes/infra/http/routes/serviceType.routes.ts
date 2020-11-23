@@ -19,5 +19,6 @@ serviceTypeRouter.get(
   '/specificSubService/:id',
   providerSubServicesController.show,
 );
+serviceTypeRouter.put('/activeService/:id', providersController.active);
 
 export default serviceTypeRouter;

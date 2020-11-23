@@ -14,4 +14,14 @@ export default class CreateServicesTypes {
 
     return response.json(serviceType);
   }
+
+  public async active(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+    const { active } = request.body;
+
+    const ProviderServiceTypes = container.resolve(ListProviderServiceTypes);
+    const service = await ProviderServiceTypes.ActiveOrDesactivate(id, active);
+
+    return response.json(service);
+  }
 }

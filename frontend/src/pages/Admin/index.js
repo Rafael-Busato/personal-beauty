@@ -35,17 +35,10 @@ import {
 
 function Admin() {
   const { signOut, user } = useAuth();
-
   const formRef = useRef(null);
 
   const [listServices, setListServices] = useState([]);
-  const [listSubServices, setListSubServices] = useState([]);
-
-  const [services, setServices] = useContext(TypeOfServicesContext);
-  const [subServices, setSubServices] = useContext(TypeOfSubServicesContext);
-
   const [textService, setTextService] = useState('');
-  const [textSubService, setTextSubService] = useState('');
 
   const [getServiceTypesFT, setGetServiceTypesFC] = useState();
 
@@ -53,44 +46,35 @@ function Admin() {
     async function getServicesTypes() {
       const { data } = await api.get('service/listServicesType');
       setListServices(data);
-      // setListSubServices(data);
     }
 
     getServicesTypes();
     setGetServiceTypesFC(() => getServicesTypes);
   }, []);
 
-  // useEffect(() => {
-  //   async function getSubServices() {
-  //     const { data } = await api.get(
-  //       `service/specificSubService/${'f053b64b-378e-4be2-8c72-4b9da6c32277'}`,
-  //     );
+  const handleActiveServiceType = useCallback(async (id, active) => {
+    await api.put(`service/activeService/${id}`, {
+      active,
+    });
 
-  //     console.log('data', data);
-  //     setListSubServices(data);
-  //   }
-  //   getSubServices();
-  // }, []);
+    getServiceTypesFT();
+  });
 
   const handleAddNewServiceType = useCallback(async () => {
     if (!textService) return;
 
-    const response = await api.post('service/serviceType', {
+    await api.post('service/serviceType', {
       service_type: textService,
     });
 
-    const data = {
-      id: uuid(),
-      service_type: response.data.service_type,
-      active: response.data.active,
-    };
-
     getServiceTypesFT();
     setTextService('');
-  }, [services, setServices, textService]);
+  }, [textService]);
 
   const handleAddNewSubService = useCallback(
     async (id) => {
+      if (!Object.values(id)[0]) return;
+
       await api.put(`service/subServices/${Object.keys(id)[0]}`, {
         new_sub_service: [
           {
@@ -105,40 +89,12 @@ function Admin() {
 
       getServiceTypesFT();
     },
-    [textSubService, getServiceTypesFT],
+    [getServiceTypesFT],
   );
-
-  const handleServices = useCallback((item) => {
-    const a = services.findIndex((element) => element.id === item.id);
-
-    services[a].isAvailable = !item.isAvailable;
-    setServices([...services]);
-  }, []);
-
-  const handleSubServices = useCallback((item) => {
-    const a = subServices.findIndex((element) => element.id === item.id);
-
-    subServices[a].isAvailable = !item.isAvailable;
-    setSubServices([...subServices]);
-  }, []);
 
   const handleSignOut = useCallback(() => {
     signOut();
   }, [signOut]);
-
-  function handleMapSubService(item) {
-    // const servicesParsed = JSON.parse(item.sub_service.sub_services);
-    // servicesParsed.map((service) => {
-    //   return (
-    //     <div style={{ display: 'flex', marginTop: 5 }} key={service.id}>
-    //       <p>{service}</p>
-    //       <span onClick={() => handleSubServices(service.id)}>
-    //         {service.active ? 'desativar' : 'ativar'}
-    //       </span>
-    //     </div>
-    //   );
-    // });
-  }
 
   return (
     <Container>
@@ -186,7 +142,11 @@ function Admin() {
                   <div>
                     <div>
                       <p>{item.service_type}</p>
-                      <span onClick={() => handleServices(item)}>
+                      <span
+                        onClick={() =>
+                          handleActiveServiceType(item.id, item.active)
+                        }
+                      >
                         {item.active ? 'desativar' : 'ativar'}
                       </span>
                     </div>
@@ -196,17 +156,17 @@ function Admin() {
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         {item.sub_service?.map((item) => {
-                          const teste = JSON.parse(item);
+                          const serviceParsed = JSON.parse(item);
                           return (
                             <div
                               style={{ display: 'flex', marginTop: 5 }}
-                              key={teste.id}
+                              key={serviceParsed.id}
                             >
-                              <p>{teste.sub_services}</p>
+                              <p>{serviceParsed.sub_services}</p>
                               <span
                               // onClick={() => handleSubServices(service.id)}
                               >
-                                {teste.active ? 'desativar' : 'ativar'}
+                                {serviceParsed.active ? 'desativar' : 'ativar'}
                               </span>
                             </div>
                           );

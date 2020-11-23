@@ -70,6 +70,19 @@ class CreateServiceType {
 
     return findSubServices;
   }
+
+  public async ActiveOrDesactivate(
+    id: string,
+    active: boolean,
+  ): Promise<ServicesTypes> {
+    let findSubServices = await this.servicesTypesRepository.findById(id);
+
+    findSubServices.active = !active;
+
+    await this.servicesTypesRepository.save(findSubServices);
+
+    return findSubServices;
+  }
 }
 
 export default CreateServiceType;

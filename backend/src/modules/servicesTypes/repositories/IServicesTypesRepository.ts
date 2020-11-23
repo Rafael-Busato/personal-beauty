@@ -13,6 +13,7 @@ export default interface IServicesTypesRepository {
   findById(id: string): Promise<ServicesTypes>;
   index(): Promise<ServicesTypes>;
   show(id: string): Promise<IUpdateSubServicesTypesDTO>;
+  active(id: string, active: boolean): Promise<ServicesTypes>;
 
   // findByDate(provider_type: string): Promise<ServicesTypes | undefined>;
   // findAllInMonthFromProvider(
