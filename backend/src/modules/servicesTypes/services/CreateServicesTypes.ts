@@ -61,13 +61,14 @@ class CreateServiceType {
   }: IRequestSubService): Promise<ServicesTypes> {
     let findSubServices = await this.servicesTypesRepository.findById(id);
 
-    const teste = [...findSubServices.sub_service, ...new_sub_service];
-
-    findSubServices.sub_service = teste;
+    findSubServices.sub_service = [
+      ...findSubServices.sub_service,
+      ...new_sub_service,
+    ];
 
     await this.servicesTypesRepository.save(findSubServices);
 
-    return true;
+    return findSubServices;
   }
 }
 

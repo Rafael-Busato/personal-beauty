@@ -47,6 +47,8 @@ function Admin() {
   const [textService, setTextService] = useState('');
   const [textSubService, setTextSubService] = useState('');
 
+  const [getServiceTypesFT, setGetServiceTypesFC] = useState();
+
   useEffect(() => {
     async function getServicesTypes() {
       const { data } = await api.get('service/listServicesType');
@@ -55,6 +57,7 @@ function Admin() {
     }
 
     getServicesTypes();
+    setGetServiceTypesFC(() => getServicesTypes);
   }, []);
 
   // useEffect(() => {
@@ -82,40 +85,27 @@ function Admin() {
       active: response.data.active,
     };
 
-    setListServices([...listServices, data]);
+    getServiceTypesFT();
     setTextService('');
   }, [services, setServices, textService]);
 
   const handleAddNewSubService = useCallback(
     async (id) => {
-      const { data: response } = await api.get(
-        `service/specificSubService/3036428f-322e-4fe6-aaa8-4063d45c4304`,
-      );
+      await api.put(`service/subServices/${Object.keys(id)[0]}`, {
+        new_sub_service: [
+          {
+            id: uuid(),
+            sub_services: Object.values(id)[0],
+            active: true,
+            update_at: new Date(),
+            created_at: new Date(),
+          },
+        ],
+      });
 
-      const newSub = [
-        ...response.sub_service,
-        {
-          id: uuid(),
-          sub_services: Object.values(id)[0],
-          active: true,
-          update_at: new Date(),
-          created_at: new Date(),
-        },
-      ];
-      const responseApi = await api.put(
-        `service/subServices/${Object.keys(id)[0]}`,
-        {
-          new_sub_service: newSub,
-        },
-      );
-
-      console.log('resposta', responseApi);
-
-      // let newSubService = JSON.parse(response.data.sub_service[0]);
-
-      // setListSubServices([listSubServices, newSubService.sub_services]);
+      getServiceTypesFT();
     },
-    [textSubService],
+    [textSubService, getServiceTypesFT],
   );
 
   const handleServices = useCallback((item) => {
@@ -187,7 +177,6 @@ function Admin() {
 
           <Services>
             {listServices.map((item, index) => {
-              console.log('item', item);
               return (
                 <Form
                   ref={formRef}
@@ -206,9 +195,7 @@ function Admin() {
                     </h1>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        {item.sub_service.map((item) => {
-                          console.log('sub service item MAP', JSON.parse(item));
-
+                        {item.sub_service?.map((item) => {
                           const teste = JSON.parse(item);
                           return (
                             <div
