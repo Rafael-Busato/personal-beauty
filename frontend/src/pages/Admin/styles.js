@@ -130,3 +130,7 @@ export const Services = styled.div`
     margin-bottom: 15px;
   }
 `;
+
+export const WrapperForm = styled.div`
+  margin-bottom: 30px !important;
+`;

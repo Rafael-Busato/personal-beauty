@@ -31,6 +31,7 @@ import {
   TypeOfServices,
   WrapperInput,
   Services,
+  WrapperForm,
 } from './styles';
 
 function Admin() {
@@ -134,61 +135,67 @@ function Admin() {
           <Services>
             {listServices.map((item, index) => {
               return (
-                <Form
-                  ref={formRef}
-                  key={index}
-                  onSubmit={handleAddNewSubService}
-                >
-                  <div>
+                <WrapperForm>
+                  <Form
+                    ref={formRef}
+                    key={index}
+                    onSubmit={handleAddNewSubService}
+                  >
                     <div>
-                      <p>{item.service_type}</p>
-                      <span
-                        onClick={() =>
-                          handleActiveServiceType(item.id, item.active)
-                        }
-                      >
-                        {item.active ? 'desativar' : 'ativar'}
-                      </span>
-                    </div>
-                    <h1 style={{ fontSize: 16, margin: '20px 0 10px 0' }}>
-                      Sub Serviços
-                    </h1>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        {item.sub_service?.map((item) => {
-                          const serviceParsed = JSON.parse(item);
-                          return (
-                            <div
-                              style={{ display: 'flex', marginTop: 5 }}
-                              key={serviceParsed.id}
-                            >
-                              <p>{serviceParsed.sub_services}</p>
-                              <span
-                              // onClick={() => handleSubServices(service.id)}
-                              >
-                                {serviceParsed.active ? 'desativar' : 'ativar'}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                      <div style={{ marginTop: 12 }}>
-                        <Input name={(item.service_type, item.id)} />
-                        <button
-                          style={{
-                            marginLeft: 0,
-                            marginTop: 10,
-                            width: 150,
-                            height: 45,
-                          }}
-                          type="submit"
+                      <div>
+                        <p>{item.service_type}</p>
+                        <span
+                          onClick={() =>
+                            handleActiveServiceType(item.id, item.active)
+                          }
                         >
-                          Adicionar
-                        </button>
+                          {item.active ? 'desativar' : 'ativar'}
+                        </span>
+                      </div>
+                      <h1 style={{ fontSize: 16, margin: '20px 0 10px 0' }}>
+                        Sub Serviços
+                      </h1>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <div
+                          style={{ display: 'flex', flexDirection: 'column' }}
+                        >
+                          {item.sub_service?.map((item) => {
+                            const serviceParsed = JSON.parse(item);
+                            return (
+                              <div
+                                style={{ display: 'flex', marginTop: 5 }}
+                                key={serviceParsed.id}
+                              >
+                                <p>{serviceParsed.sub_services}</p>
+                                <span
+                                // onClick={() => handleSubServices(service.id)}
+                                >
+                                  {serviceParsed.active
+                                    ? 'desativar'
+                                    : 'ativar'}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div style={{ marginTop: 12 }}>
+                          <Input name={(item.service_type, item.id)} />
+                          <button
+                            style={{
+                              marginLeft: 0,
+                              marginTop: 10,
+                              width: 150,
+                              height: 45,
+                            }}
+                            type="submit"
+                          >
+                            Adicionar
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Form>
+                  </Form>
+                </WrapperForm>
               );
             })}
           </Services>

@@ -217,24 +217,6 @@ const SignUp: React.FC = () => {
                   type="password"
                   placeholder="Confirmar Senha"
                 />
-                {/* <Input name="phone" icon={FiMail} placeholder="Celular" /> */}
-                {/* <Input
-                  name="occupation"
-                  icon={FiMail}
-                  placeholder="Profissão"
-                /> */}
-                <input
-                  name="occupation"
-                  type="checkbox"
-                  // checked={this.state.isGoing}
-                  // onChange={this.handleInputChange}
-                />
-                <select name="occupation" id="occupation">
-                  <option value="Cabeleireiro">Cabeleireiro</option>
-                  <option value="Barbeiro">Barbeiro</option>
-                  <option value="Manicure">Manicure</option>
-                  <option value="Pedicure">Pedicure</option>
-                </select>
               </>
             )}
 
