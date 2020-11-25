@@ -28,10 +28,16 @@ export default function InputUnform({
     <div>
       {error ? (
         <FormControlLabel
-          style={{ color: 'red' }}
+          style={{
+            color: '#ff9000'
+          }}
           error={error}
           control={
             <Checkbox
+              style={{
+                color: '#ff9000'
+
+              }}
               inputRef={inputRef}
               {...rest}
               checked={checked}
@@ -43,20 +49,24 @@ export default function InputUnform({
           label={error.concat(' (' + label + ')')}
         />
       ) : (
-        <FormControlLabel
-          control={
-            <Checkbox
-              inputRef={inputRef}
-              {...rest}
-              name={name}
-              checked={checked}
-              onChange={onChange}
-              value={value}
-            />
-          }
-          label={label}
-        />
-      )}
+          <FormControlLabel
+            control={
+              <Checkbox
+                inputRef={inputRef}
+                {...rest}
+                style={{
+                  color: '#ff9000'
+
+                }}
+                name={name}
+                checked={checked}
+                onChange={onChange}
+                value={value}
+              />
+            }
+            label={label}
+          />
+        )}
     </div>
   );
 }

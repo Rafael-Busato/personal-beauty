@@ -8,7 +8,6 @@ export default class UsersController {
     const data = request.body;
 
     const createUser = container.resolve(CreateUserService);
-    console.log('data', data);
     const user = await createUser.execute({
       name: data.name,
       city: data.city,

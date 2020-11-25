@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { FiMail, FiUser, FiLock, FiArrowLeft } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
@@ -19,13 +19,19 @@ import CheckBox from '../../components/CheckBox';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 
-// interface IAddress {
-//   city: string;
-//   neighborhood: string;
-//   state: string;
-//   zipCode: string;
-//   address: string;
-// }
+interface SubService {
+  id: string;
+  sub_service: string;
+  active: boolean;
+}
+
+interface ListServiceType {
+  active: boolean;
+  created_at: Date;
+  id: string;
+  service_type: string;
+  sub_service: any;
+}
 
 interface SignUpFormData {
   name: string;
@@ -56,15 +62,10 @@ const SignUp: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
-  const [subService, setSubService] = useState({
-    corte: false,
-    unha: false,
-  });
+  const [listServiceType, setListServiceType] = useState<ListServiceType[]>([]);
+  const [subService, setSubService] = useState();
 
-  const [serviceType, setServiceType] = useState({
-    cabeleleiro: false,
-    manicure: false,
-  });
+  const [serviceType, setServiceType] = useState();
 
   const [formData, setFormData] = useState<SignUpFormData>({
     name: '',
@@ -95,19 +96,28 @@ const SignUp: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleChangeServiceType = (event: any) => {
+  const handleChangeServiceType = (event: any, service_type: string) => {
     setServiceType({
       ...serviceType,
-      [event.target.name]: event.target.checked,
+      [service_type]: event.target.checked,
     });
   };
 
-  const handleChangeSubService = (event: any) => {
+  const handleChangeSubService = (event: any, sub_services: string) => {
     setSubService({
       ...subService,
-      [event.target.name]: event.target.checked,
+      [sub_services]: event.target.checked,
     });
   };
+
+  useEffect(() => {
+    async function getListServiceType() {
+      const response = await api.get('/service/listServicesType');
+      setListServiceType(response.data);
+    }
+
+    getListServiceType();
+  }, []);
 
   const handleSubmit = useCallback(
     async (data: SignUpFormData) => {
@@ -158,7 +168,6 @@ const SignUp: React.FC = () => {
             description: 'Você já pode fazer seu login no Personal Beauty!',
           });
         } catch (err) {
-          console.log('erro ', err);
           if (err instanceof Yup.ValidationError) {
             const errors = getValidationErrors(err);
 
@@ -258,35 +267,67 @@ const SignUp: React.FC = () => {
             )}
             {activeStep === 3 && (
               <>
-                <div>
-                  <div>
-                    <CheckBox
-                      label="Cabeleleiro"
-                      checked={serviceType.cabeleleiro}
-                      onChange={handleChangeServiceType}
-                      id="scales"
-                      name="cabeleleiro"
-                    />
-                  </div>
-                  {serviceType.cabeleleiro && (
-                    <div style={{ display: 'flex' }}>
+                {listServiceType.map((service) => {
+                  // console.log('service', service);
+                  const item = JSON.parse(service.sub_service);
+                  console.log('item', item);
+                  return (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        flexDirection: 'column',
+                        marginTop: 10,
+                      }}
+                      key={service.id}
+                    >
                       <div>
                         <CheckBox
-                          label="Corte"
-                          checked={subService.corte}
-                          onChange={handleChangeSubService}
-                          id="scales"
-                          name="corte"
+                          label={service.service_type}
+                          checked={
+                            !!serviceType && serviceType[service.service_type]
+                          }
+                          onChange={(event: any) =>
+                            handleChangeServiceType(event, service.service_type)
+                          }
+                          name={service.service_type}
                         />
                       </div>
-                      {subService.corte && (
-                        <div>
-                          <Input name="name" icon={FiUser} placeholder="Nome" />
+                      {!!serviceType && serviceType[service.service_type] && (
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginTop: 10,
+                          }}
+                        >
+                          <div>
+                            <CheckBox
+                              label={item.sub_services}
+                              checked={
+                                !!subService && subService[item.sub_services]
+                              }
+                              onChange={(event: any) =>
+                                handleChangeSubService(event, item.sub_services)
+                              }
+                              name={item.sub_services}
+                            />
+                          </div>
+                          {!!subService && subService[item.sub_services] && (
+                            <div>
+                              <Input
+                                name="price"
+                                type="number"
+                                icon={FiUser}
+                                placeholder="Preço do serviço"
+                              />
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
+                  );
+                })}
               </>
             )}
 

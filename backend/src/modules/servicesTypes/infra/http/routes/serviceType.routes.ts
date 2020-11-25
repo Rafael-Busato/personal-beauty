@@ -10,11 +10,11 @@ const serviceTypeRouter = Router();
 const providersController = new createServicesTypes();
 const providerSubServicesController = new createSubServices();
 
+serviceTypeRouter.get('/listServicesType', providerSubServicesController.index);
 serviceTypeRouter.use(ensureAuthenticated);
 serviceTypeRouter.post('/serviceType', providersController.create);
 
 serviceTypeRouter.put('/subServices/:id', providerSubServicesController.update);
-serviceTypeRouter.get('/listServicesType', providerSubServicesController.index);
 serviceTypeRouter.get(
   '/specificSubService/:id',
   providerSubServicesController.show,

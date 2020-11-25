@@ -3,6 +3,9 @@ import { container } from 'tsyringe';
 import ListProviderServiceTypes from '@modules/servicesTypes/services/CreateServicesTypes';
 
 export default class CreateServicesTypes {
+  // public async index(request: Request, response: Response): Promise<Response> {
+  //   const 
+  // }
   public async create(request: Request, response: Response): Promise<Response> {
     const { service_type } = request.body;
 
