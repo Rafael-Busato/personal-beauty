@@ -268,9 +268,8 @@ const SignUp: React.FC = () => {
             {activeStep === 3 && (
               <>
                 {listServiceType.map((service) => {
-                  // console.log('service', service);
-                  const item = JSON.parse(service.sub_service);
-                  console.log('item', item);
+                  console.log('here', service.sub_service);
+                  // const item = JSON.parse(service.sub_service);
                   return (
                     <div
                       style={{
@@ -294,35 +293,46 @@ const SignUp: React.FC = () => {
                         />
                       </div>
                       {!!serviceType && serviceType[service.service_type] && (
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginTop: 10,
-                          }}
-                        >
-                          <div>
-                            <CheckBox
-                              label={item.sub_services}
-                              checked={
-                                !!subService && subService[item.sub_services]
-                              }
-                              onChange={(event: any) =>
-                                handleChangeSubService(event, item.sub_services)
-                              }
-                              name={item.sub_services}
-                            />
-                          </div>
-                          {!!subService && subService[item.sub_services] && (
-                            <div>
-                              <Input
-                                name="price"
-                                type="number"
-                                icon={FiUser}
-                                placeholder="Preço do serviço"
-                              />
-                            </div>
-                          )}
+                        <div>
+                          {service.sub_service.map((type: any) => {
+                            const item = JSON.parse(type);
+                            return (
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  marginTop: 10,
+                                }}
+                              >
+                                <div>
+                                  <CheckBox
+                                    label={item.sub_services}
+                                    checked={
+                                      !!subService &&
+                                      subService[item.sub_services]
+                                    }
+                                    onChange={(event: any) =>
+                                      handleChangeSubService(
+                                        event,
+                                        item.sub_services,
+                                      )
+                                    }
+                                    name={item.sub_services}
+                                  />
+                                </div>
+                                {!!subService && subService[item.sub_services] && (
+                                  <div>
+                                    <Input
+                                      name="price"
+                                      type="number"
+                                      icon={FiUser}
+                                      placeholder="Preço do serviço"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       )}
                     </div>

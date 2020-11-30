@@ -133,4 +133,6 @@ export const Services = styled.div`
 
 export const WrapperForm = styled.div`
   margin-bottom: 30px !important;
+  border: solid 1px #fff;
+  padding: 15px;
 `;

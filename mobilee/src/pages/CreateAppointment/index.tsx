@@ -211,19 +211,12 @@ const CreateAppointment: React.FC = () => {
 
   const handleCreateAppointment = useCallback(async () => {
     if (!serviceLocation.city) {
-      console.log('serviceLocation', serviceLocation);
       setNeedServiceLocation(true);
 
       return;
     }
 
     if (!card.number || !card.validThru || !card.name || !card.securityCode) {
-      console.log('ta entrando aqui');
-      console.log('number', card.number);
-      console.log('validThru', card.validThru);
-      console.log('name', card.name);
-      console.log('securityCode', card.securityCode);
-
       setModalPaymentVisible(true);
       return;
     }
