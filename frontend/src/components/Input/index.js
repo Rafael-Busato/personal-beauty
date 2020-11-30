@@ -12,11 +12,14 @@ import { Container, Error } from './styles';
 //   icon: ComponentType<IconBaseProps>;
 // }
 
+
+
 const Input = ({
   name,
   hasMask = false,
   containerStyle = {},
   icon: Icon,
+  errorInput = false,
   ...rest
 }) => {
   const inputRef = useRef(null);
@@ -30,7 +33,7 @@ const Input = ({
     setIsFocused(true);
   }, []);
 
-  const handleInputBlur = useCallback(() => {
+  const handleInputBlur = useCallback((event) => {
     setIsFocused(false);
 
     setIsFilled(!!inputRef.current?.value);
@@ -50,16 +53,27 @@ const Input = ({
     });
   }, [fieldName, registerField]);
 
+  function teste(um, dois, tres, quatro){
+    console.log(um.target.value.length);
+    console.log(dois);
+    console.log(tres);
+    console.log(quatro);
+
+  }
+
   return (
     <Container
       style={containerStyle}
-      isErrored={!!error}
+      isErrored={!!error || !!errorInput}
       isFilled={isFilled}
       isFocused={isFocused}
     >
       {Icon && <Icon size={20} />}
       {hasMask ? (
         <ReactInputMask
+        
+        onChangeCapture={teste}
+        // beforeMaskedValueChange={teste}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           defaultValue={defaultValue}

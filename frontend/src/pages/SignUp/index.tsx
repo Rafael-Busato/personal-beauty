@@ -9,6 +9,8 @@ import { Stepper, Step, StepLabel } from '@material-ui/core';
 
 import api from '../../services/api';
 
+import { formater } from '../../utils/formatCPF';
+
 import { useToast } from '../../hooks/toast';
 
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -60,6 +62,9 @@ const SignUp: React.FC = () => {
   const { addToast } = useToast();
   const history = useHistory();
 
+  const [cpf, setCpf] = useState('');
+  const [cpfError, setCpfError] = useState(false);
+
   const [activeStep, setActiveStep] = useState(0);
 
   const [listServiceType, setListServiceType] = useState<ListServiceType[]>([]);
@@ -69,12 +74,12 @@ const SignUp: React.FC = () => {
 
   const [formData, setFormData] = useState<SignUpFormData>({
     name: '',
-    city: '',
     email: '',
     password: '',
+    occupation: '',
+    city: '',
     bank: '',
     phone: '',
-    occupation: '',
     zipCode: '',
     neighborhood: '',
     state: '',
@@ -109,6 +114,21 @@ const SignUp: React.FC = () => {
       [sub_services]: event.target.checked,
     });
   };
+
+  const handleChangeVerifyCPF = useCallback(
+    (event: any) => {
+      if (formater.cpf(event.target.value).length < 14) {
+        setCpfError(true);
+      } else {
+
+        setCpfError(false)
+      }
+      setCpf(formater.cpf(event.target.value));
+    },
+    [cpf, cpfError],
+  );
+
+  console.log(cpfError)
 
   useEffect(() => {
     async function getListServiceType() {
@@ -256,7 +276,10 @@ const SignUp: React.FC = () => {
                   hasMask
                   icon={FiUser}
                   placeholder="CPF"
-                  mask="999.999.999-99"
+                  errorInput={cpfError}
+                  // mask="999.999.999-99"
+                  value={cpf}
+                  onChange={(event: any) => handleChangeVerifyCPF(event)}
                 />
                 <Input
                   name="fullname"
