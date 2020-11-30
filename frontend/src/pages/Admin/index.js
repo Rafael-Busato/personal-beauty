@@ -17,6 +17,8 @@ import { useAuth } from '../../hooks/auth';
 
 import Input from '../../components/Input';
 
+import logo from '../../assets/logo.png';
+
 import api from '../../services/api';
 
 import { TypeOfServicesContext } from '../../hooks/typeOfServices';
@@ -101,7 +103,7 @@ function Admin() {
     <Container>
       <Header>
         <HeaderContent>
-          <h1>Logo</h1>
+          <img src={logo} alt="logo" />
 
           <Profile>
             <img
@@ -167,13 +169,13 @@ function Admin() {
                                 key={serviceParsed.id}
                               >
                                 <p>{serviceParsed.sub_services}</p>
-                                <span
+                                {/* <span
                                 // onClick={() => handleSubServices(service.id)}
                                 >
                                   {serviceParsed.active
                                     ? 'desativar'
                                     : 'ativar'}
-                                </span>
+                                </span> */}
                               </div>
                             );
                           })}

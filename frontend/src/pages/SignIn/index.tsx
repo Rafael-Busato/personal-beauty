@@ -13,6 +13,7 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
+import logo from '../../assets/logo.png';
 
 interface SignInFormData {
   email: string;
@@ -73,7 +74,7 @@ const SignIn: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          <h1>Logo</h1>
+          <img src={logo} alt="logo" />
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Faça seu login</h1>

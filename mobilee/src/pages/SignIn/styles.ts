@@ -9,7 +9,7 @@ export const Container = styled.View`
   padding: 0 30px ${Platform.OS === 'android' ? 150 : 40}px;
 `;
 
-export const Logo = styled.Text`
+export const Logo = styled.Image`
   color: #fff;
   font-size: 38px;
 `;

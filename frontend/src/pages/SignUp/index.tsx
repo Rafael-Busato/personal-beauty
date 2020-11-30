@@ -19,6 +19,8 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import CheckBox from '../../components/CheckBox';
 
+import logo from '../../assets/logo.png';
+
 import { Container, Content, AnimationContainer, Background } from './styles';
 
 interface SubService {
@@ -133,7 +135,12 @@ const SignUp: React.FC = () => {
   useEffect(() => {
     async function getListServiceType() {
       const response = await api.get('/service/listServicesType');
-      setListServiceType(response.data);
+
+      const activeServiceTypes = response.data.filter((item: any) => {
+        return item.active === true;
+      });
+
+      setListServiceType(activeServiceTypes);
     }
 
     getListServiceType();
@@ -210,7 +217,7 @@ const SignUp: React.FC = () => {
       <Background />
       <Content>
         <AnimationContainer>
-          <h1>Logo</h1>
+          <img src={logo} alt="logo" />
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Faça seu cadastro</h1>

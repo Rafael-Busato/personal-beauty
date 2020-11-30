@@ -24,6 +24,8 @@ import Button from '../../components/Button';
 
 // import logoImg from '../../assets/logo.png';
 
+import logo from '../../assets/logo.png';
+
 import {
   Container,
   Logo,
@@ -108,7 +110,7 @@ const SignUp: React.FC = () => {
         // contentContainerStyle={{ flex: 1 }}
         >
           <Container>
-            <Logo>Logo</Logo>
+            <Logo source={logo} />
             <View>
               <Title>Crie sua conta</Title>
             </View>
