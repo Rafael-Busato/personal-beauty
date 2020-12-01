@@ -23,6 +23,8 @@ import {
 } from './styles';
 import api from '../../services/api';
 
+import logo from '../../assets/logo.png';
+
 interface MonthAvailabilityItem {
   day: number;
   available: boolean;
@@ -152,7 +154,7 @@ const Dashboard: React.FC = () => {
     <Container>
       <Header>
         <HeaderContent>
-          <h1>Logo</h1>
+          <img src={logo} alt="logo" />
 
           <Profile>
             <img

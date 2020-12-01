@@ -21,6 +21,8 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
+import logo from '../../assets/logo.png';
+
 // import logoImg from '../../assets/logo.png';
 
 import {
@@ -96,7 +98,7 @@ const SignIn: React.FC = () => {
           contentContainerStyle={{ flex: 1 }}
         >
           <Container>
-            <Logo>Logo</Logo>
+            <Logo source={logo} />
             <View>
               <Title>Faça seu login</Title>
             </View>

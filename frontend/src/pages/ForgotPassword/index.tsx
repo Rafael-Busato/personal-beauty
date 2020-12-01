@@ -19,6 +19,8 @@ import Input from '../../components/Input';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 
+import logo from '../../assets/logo.png';
+
 interface ForgotPasswordFormData {
   email: string;
 }
@@ -85,7 +87,7 @@ const ForgotPassword: React.FC = () => {
     <Container>
       <Content>
         <AnimationContainer>
-          <h1>Logo</h1>
+          <img src={logo} alt="logo" />
 
           <Form ref={formRef} onSubmit={handleSubmit}>
             <h1>Recuperar senha</h1>
