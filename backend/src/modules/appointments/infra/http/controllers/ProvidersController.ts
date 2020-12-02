@@ -23,7 +23,7 @@ export default class ProvidersController {
   ): Promise<Response> {
     const user_id = request.user.id;
     const { service_type, city } = request.query;
-    console.log(city === undefined);
+
     const listProviders = container.resolve(ListProvidersService);
 
     const providers = await listProviders.execute({ user_id });
@@ -47,7 +47,7 @@ export default class ProvidersController {
           }
         });
       });
-    } else if (city && !service_type) {
+    } else if (city && service_type == undefined) {
       providers.forEach(service => {
         service.city === city && fill.push(service);
       });
