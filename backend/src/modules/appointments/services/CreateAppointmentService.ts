@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { startOfHour, isBefore, getHours, format } from 'date-fns';
+import { startOfHour, isBefore, getHours, format, addHours } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -29,9 +29,8 @@ class CreateAppointmentService {
     provider_id,
     user_id,
   }: IRequest): Promise<Appointment> {
+    console.log('heressss', date);
     const appointmentDate = startOfHour(date);
-
-    console.log('appointmentDate', appointmentDate);
 
     if (isBefore(appointmentDate, Date.now())) {
       throw new AppError("You can't create an appointment on past date");
@@ -59,10 +58,12 @@ class CreateAppointmentService {
     const appointment = await this.appointmentsRepository.create({
       provider_id,
       user_id,
-      date: appointmentDate,
+      date: addHours(new Date(appointmentDate), 3),
     });
+    console.log('appointmentDate', appointmentDate);
 
     const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
+    console.log('dateFormatted', dateFormatted);
 
     await this.notificationsRepository.create({
       recipient_id: provider_id,

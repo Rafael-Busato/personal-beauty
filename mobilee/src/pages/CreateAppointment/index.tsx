@@ -223,6 +223,7 @@ const CreateAppointment: React.FC = () => {
 
     try {
       const date = new Date(selectedDate);
+      console.log('datee', date);
 
       date.setHours(selectedHour);
       date.setMinutes(0);

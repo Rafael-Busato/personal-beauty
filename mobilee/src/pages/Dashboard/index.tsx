@@ -85,9 +85,8 @@ const Dashboard: React.FC = () => {
     setIsLoading(true);
 
     setModalVisible(false);
-    setCity('');
     setOccupation('');
-    setProviderText(`${occupation}s`);
+    setProviderText(`${occupation} | ${city}`);
     const interval = setInterval(() => {
       setIsLoading(false);
     }, 3000);
