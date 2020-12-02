@@ -130,7 +130,6 @@ const SignUp: React.FC = () => {
     [cpf, cpfError],
   );
 
-  console.log(cpfError)
 
   useEffect(() => {
     async function getListServiceType() {
@@ -298,7 +297,6 @@ const SignUp: React.FC = () => {
             {activeStep === 3 && (
               <>
                 {listServiceType.map((service) => {
-                  console.log('here', service.sub_service);
                   // const item = JSON.parse(service.sub_service);
                   return (
                     <div

@@ -7,7 +7,21 @@ export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const data = request.body;
 
+    console.log('service', data.serviceType);
+    console.log('sub', data.subService);
+
     const createUser = container.resolve(CreateUserService);
+
+    const trueKeys = Object.keys(data.serviceType).filter(
+      key => data.serviceType[key],
+    );
+
+    console.log(trueKeys);
+
+    const trueKeySubServices = Object.keys(data.subService).filter(
+      key => data.subService[key],
+    );
+
     const user = await createUser.execute({
       name: data.name,
       city: data.city,
@@ -25,13 +39,13 @@ export default class UsersController {
       account: data.account,
       document: data.document,
       fullname: data.fullname,
-      service_type: [data.serviceType],
-      sub_service: [data.subService],
-      price: '3333',
+      service_type: trueKeys,
+      sub_service: trueKeySubServices,
+      price: data.price,
     });
 
     delete user.password;
 
-    return response.json(true);
+    return response.json(user);
   }
 }
