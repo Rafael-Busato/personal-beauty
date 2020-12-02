@@ -12,15 +12,23 @@ export default class UsersController {
 
     const createUser = container.resolve(CreateUserService);
 
-    const trueKeys = Object.keys(data.serviceType).filter(
-      key => data.serviceType[key],
-    );
+    let trueKeys, trueKeySubServices;
 
-    console.log(trueKeys);
+    if (!!data.serviceType) {
+      trueKeys = Object.keys(data.serviceType).filter(
+        key => data.serviceType[key],
+      );
+    } else {
+      trueKeys = [];
+    }
 
-    const trueKeySubServices = Object.keys(data.subService).filter(
-      key => data.subService[key],
-    );
+    if (!!data.subService) {
+      trueKeySubServices = Object.keys(data.subService).filter(
+        key => data.subService[key],
+      );
+    } else {
+      trueKeySubServices = [];
+    }
 
     const user = await createUser.execute({
       name: data.name,
@@ -41,7 +49,7 @@ export default class UsersController {
       fullname: data.fullname,
       service_type: trueKeys,
       sub_service: trueKeySubServices,
-      price: data.price,
+      price: data.price || '',
     });
 
     delete user.password;

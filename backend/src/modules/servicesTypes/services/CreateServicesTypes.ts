@@ -25,7 +25,7 @@ class CreateServiceType {
     private servicesTypesRepository: IServicesTypesRepository,
   ) {}
 
-  public async index(): Promise<ServicesTypes> {
+  public async index(): Promise<[]> {
     const listServiceTypes = await this.servicesTypesRepository.index();
     return listServiceTypes;
   }
@@ -33,7 +33,6 @@ class CreateServiceType {
   public async show(id: string): Promise<ServicesTypes> {
     const specificSubService = await this.servicesTypesRepository.show(id);
 
-    console.log(specificSubService);
     return specificSubService;
   }
 

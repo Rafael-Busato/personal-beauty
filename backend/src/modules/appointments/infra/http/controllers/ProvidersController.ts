@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
 import { classToClass } from 'class-transformer';
+import ListProviderServiceTypes from '@modules/servicesTypes/services/CreateServicesTypes';
 
 export default class ProvidersController {
   public async index(request: Request, response: Response): Promise<Response> {
@@ -20,22 +21,39 @@ export default class ProvidersController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    const { service_type, city } = request.params;
     const user_id = request.user.id;
-
+    const { service_type, city } = request.query;
+    console.log(city === undefined);
     const listProviders = container.resolve(ListProvidersService);
 
     const providers = await listProviders.execute({ user_id });
+    let fill = [];
 
-    const filterd = providers.filter(item => {
-      let fill = [];
-      if (service_type && city) {
-        item.service_type != service_type && item.city == city;
+    if (service_type !== undefined && city !== undefined) {
+      providers.forEach(service => {
+        service.city === city && fill.push(service);
 
-        fill.push(item);
-      }
-    });
-    
-    return response.json(classToClass(providers));
+        service.service_type.filter(item => {
+          if (item === service_type) {
+            fill.push(service);
+          }
+        });
+      });
+    } else if (service_type && city == undefined) {
+      providers.forEach(service => {
+        service.service_type.filter(item => {
+          if (item === service_type) {
+            fill.push(service);
+          }
+        });
+      });
+    } else if (city && !service_type) {
+      providers.forEach(service => {
+        service.city === city && fill.push(service);
+      });
+    } else {
+      fill.push({ error: 'Selecione um filtro' });
+    }
+    return response.json(classToClass(fill));
   }
 }
