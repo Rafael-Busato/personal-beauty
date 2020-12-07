@@ -24,9 +24,14 @@ export default class ProvidersController {
     const user_id = request.user.id;
     const { service_type, city } = request.query;
 
+    console.log('backend', service_type);
+    console.log('backend', city);
+
     const listProviders = container.resolve(ListProvidersService);
 
     const providers = await listProviders.execute({ user_id });
+
+    console.log(providers);
     let fill = [];
 
     if (service_type !== undefined && city !== undefined) {
@@ -54,6 +59,8 @@ export default class ProvidersController {
     } else {
       fill.push({ error: 'Selecione um filtro' });
     }
+
+    console.log('HEREEEEEEEEEEE', fill);
     return response.json(classToClass(fill));
   }
 }

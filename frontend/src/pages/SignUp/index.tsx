@@ -122,14 +122,12 @@ const SignUp: React.FC = () => {
       if (formater.cpf(event.target.value).length < 14) {
         setCpfError(true);
       } else {
-
-        setCpfError(false)
+        setCpfError(false);
       }
       setCpf(formater.cpf(event.target.value));
     },
     [cpf, cpfError],
   );
-
 
   useEffect(() => {
     async function getListServiceType() {

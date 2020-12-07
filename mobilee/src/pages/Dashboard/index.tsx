@@ -4,6 +4,8 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  View,
+  Text,
 } from 'react-native';
 
 import RNPickerSelect from 'react-native-picker-select';
@@ -40,6 +42,7 @@ import {
   Input2,
   WrapperInput,
   ModalHeaderTitle,
+  List,
 } from './styles';
 
 export interface Provider {
@@ -56,10 +59,27 @@ const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [providerText, setProviderText] = useState('Prestadores');
 
+  const [getOccupation, setGetOccupation] = useState([]);
+  const [listServices, setListServices] = useState([]);
+
   const [card, setCard] = useContext(RegisterPaymentContext);
 
   const { user, signOut } = useAuth();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function getListServiceTypes() {
+      const response = await api.get('/service/listServicesType');
+
+      const services = response.data.map((item: any) => {
+        return item.service_type;
+      });
+
+      setGetOccupation(services);
+    }
+
+    getListServiceTypes();
+  }, []);
 
   useEffect(() => {
     api.get('providers').then((response) => setProviders(response.data));
@@ -91,6 +111,20 @@ const Dashboard: React.FC = () => {
       setIsLoading(false);
     }, 3000);
   };
+
+  const handleSetFilter = useCallback(async () => {
+    setModalVisible(false);
+    const response = await api.get('/providers/teste', {
+      params: {
+        service_type: occupation,
+        city,
+      },
+    });
+
+    console.log('response', response.data);
+
+    setProviders(response.data);
+  }, [occupation, city]);
 
   const avatar = 'https://avatars2.githubusercontent.com/u/64861571?s=460&v=4';
 
@@ -179,31 +213,22 @@ const Dashboard: React.FC = () => {
                 inputAndroid: { color: '#232129' },
               }}
               items={[
-                { label: 'Americana', value: 'Americana' },
-                { label: 'Artur Nogueira', value: 'Artur Nogueira' },
-                { label: 'Campinas', value: 'Campinas' },
-                { label: 'Cosmópolis', value: 'Cosmópolis' },
-                { label: 'Engenheiro Coelho', value: 'Engenheiro Coelho' },
-                { label: 'Holambra', value: 'Holambra' },
-                { label: 'Hortolândia', value: 'Hortolândia' },
-                { label: 'Indaiatuba', value: 'Indaiatuba' },
-                { label: 'Itatiba', value: 'Itatiba' },
-                { label: 'Jaguariúna', value: 'Jaguariúna' },
-                { label: 'Monte Mor', value: 'Monte Mor' },
-                { label: 'Morungaba', value: 'Morungaba' },
-                { label: 'Nova Odessa', value: 'Nova Odessa' },
-                { label: 'Paulínia', value: 'Paulínia' },
-                {
-                  label: 'Santa Barbára dOeste',
-                  value: 'Santa Barbára dOeste',
-                },
-                {
-                  label: 'Santo Antônio de Posse',
-                  value: 'Santo Antônio de Posse',
-                },
-                { label: 'Sumaré', value: 'Sumaré' },
-                { label: 'Valinhos', value: 'Valinhos' },
-                { label: 'Vinhedo', value: 'Vinhedo' },
+                { label: 'Americana', value: 'americana' },
+                { label: 'Campinas', value: 'campinas' },
+                { label: 'Cosmópolis', value: 'cosmópolis' },
+                { label: 'Holambra', value: 'holambra' },
+                { label: 'Hortolândia', value: 'hortolandia' },
+                { label: 'Indaiatuba', value: 'indaiatuba' },
+                { label: 'Itatiba', value: 'itatiba' },
+                { label: 'Jaguariúna', value: 'jaguariúna' },
+                { label: 'Monte Mor', value: 'monte mor' },
+                { label: 'Morungaba', value: 'morungaba' },
+                { label: 'Nova Odessa', value: 'nova odessa' },
+                { label: 'Paulínia', value: 'paulínia' },
+
+                { label: 'Sumaré', value: 'sumaré' },
+                { label: 'Valinhos', value: 'valinhos' },
+                { label: 'Vinhedo', value: 'vinhedo' },
               ]}
             />
           </WrapperInput>
@@ -216,14 +241,26 @@ const Dashboard: React.FC = () => {
               style={{
                 inputAndroid: { color: '#232129' },
               }}
-              items={[
-                { label: 'Cabeleireiro', value: 'cabeleireiro' },
-                { label: 'Barbeiro', value: 'barbeiro' },
-                { label: 'Manicure', value: 'manicure' },
-              ]}
+              items={getOccupation?.map((service) => {
+                return {
+                  label: service,
+                  value: service,
+                };
+              })}
             />
           </WrapperInput>
-          <TouchableOpacity onPress={getProviders}>
+          {/* <View>
+            <List style={{ display: 'flex', flexDirection: 'column' }}>
+              {listServices.map((item) => {
+                return (
+                  <Text style={{ paddingLeft: 5 }} key={item.id}>
+                    {item.service_type}
+                  </Text>
+                );
+              })}
+            </List>
+          </View> */}
+          <TouchableOpacity onPress={handleSetFilter}>
             <Button>Aplicar</Button>
           </TouchableOpacity>
         </ModalContainer>

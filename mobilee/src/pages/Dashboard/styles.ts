@@ -154,3 +154,5 @@ export const ModalHeaderTitle = styled.Text`
   font-family: 'RobotoSlab-Medium';
   line-height: 28px;
 `;
+
+export const List = styled.View``;

@@ -8,6 +8,7 @@ import React, {
 import { useRoute, useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Feather';
+import CheckBox from '@react-native-community/checkbox';
 import {
   Platform,
   Alert,
@@ -50,6 +51,9 @@ import {
   ModalContent,
   Card,
   CardNumber,
+  ServiceLocation,
+  LabelCheckbox,
+  WrapperCheckbox,
 } from './styles';
 import Button from '../../components/Button';
 import { RegisterPaymentContext } from '../../hooks/RegisterPaymentContext';
@@ -90,9 +94,14 @@ const CreateAppointment: React.FC = () => {
     routeParams.providerId,
   );
 
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   useEffect(() => {
     api.get('providers').then((response) => setProviders(response.data));
   }, []);
+
+  useEffect(() => {
+    console.log('providers', providers);
+  }, [providers]);
 
   const navigateBack = useCallback(() => {
     navigation.goBack();
@@ -210,12 +219,6 @@ const CreateAppointment: React.FC = () => {
   }, []);
 
   const handleCreateAppointment = useCallback(async () => {
-    if (!serviceLocation.city) {
-      setNeedServiceLocation(true);
-
-      return;
-    }
-
     if (!card.number || !card.validThru || !card.name || !card.securityCode) {
       setModalPaymentVisible(true);
       return;
@@ -302,9 +305,10 @@ const CreateAppointment: React.FC = () => {
             <Title>Escolha a data</Title>
 
             <OpenDatePickerButton onPress={handleToggleDatePicker}>
-              <OpenDatePickerText>Selecionar outra data</OpenDatePickerText>
+              <OpenDatePickerText>
+                Selecionar outra data | data atual: {selectedDate.getDate()}
+              </OpenDatePickerText>
             </OpenDatePickerButton>
-
             {showDatePicker && (
               <DateTimePicker
                 mode="date"
@@ -315,6 +319,30 @@ const CreateAppointment: React.FC = () => {
               />
             )}
           </Calendar>
+
+          <ServiceLocation>
+            <Title>Escolha o local de atendimento</Title>
+
+            <CreateAppointmentButton
+              onPress={() => setNeedServiceLocation(true)}
+            >
+              <CreateAppointmentButtonText>
+                Definir o local de atendimento
+              </CreateAppointmentButtonText>
+            </CreateAppointmentButton>
+          </ServiceLocation>
+
+          <ServiceLocation>
+            <Title>Defina o método de pagamento</Title>
+
+            <CreateAppointmentButton
+              onPress={() => setModalPaymentVisible(true)}
+            >
+              <CreateAppointmentButtonText>
+                Defina o metódo de pagamento
+              </CreateAppointmentButtonText>
+            </CreateAppointmentButton>
+          </ServiceLocation>
 
           <Schedule>
             <Title>Escolha o horário</Title>
@@ -365,24 +393,18 @@ const CreateAppointment: React.FC = () => {
           </Schedule>
 
           <CreateAppointmentButton onPress={handleCreateAppointment}>
-            {!serviceLocation.city ? (
-              <CreateAppointmentButtonText>
-                Definir o local de atendimento
-              </CreateAppointmentButtonText>
-            ) : (
-              <CreateAppointmentButtonText>
-                Fazer pagamento
-              </CreateAppointmentButtonText>
-            )}
+            <CreateAppointmentButtonText>
+              Realizar agendamento
+            </CreateAppointmentButtonText>
           </CreateAppointmentButton>
 
-          {serviceLocation.city && card.city && (
+          {/* {serviceLocation.city && card.city && (
             <CreateAppointmentButton onPress={createAppointment}>
               <CreateAppointmentButtonText>
                 Realizar agendamento
               </CreateAppointmentButtonText>
             </CreateAppointmentButton>
-          )}
+          )} */}
         </Content>
       </Container>
       <Modal animationType="slide" visible={modalPaymentVisible}>
@@ -420,22 +442,8 @@ const CreateAppointment: React.FC = () => {
           />
           <ErrorMessage>{errorMessage}</ErrorMessage>
 
-          <ModalContent>
-            <ModalTitle>Selecione um cartão existente</ModalTitle>
-            <Card onPress={handleSelectCard}>
-              <CardNumber>**** **** 5437</CardNumber>
-            </Card>
-
-            <Card onPress={handleSelectCard}>
-              <CardNumber>**** **** 1232</CardNumber>
-            </Card>
-
-            <Card onPress={handleSelectCard}>
-              <CardNumber>**** **** 4324</CardNumber>
-            </Card>
-          </ModalContent>
           <TouchableOpacity onPress={handleSaveCard}>
-            <Button>Adicionar novo cartão</Button>
+            <Button>Adicionar cartão</Button>
           </TouchableOpacity>
         </ModalContainer>
       </Modal>
@@ -445,6 +453,14 @@ const CreateAppointment: React.FC = () => {
           <ModalTitle>Defina o local de atendimento</ModalTitle>
         </ModalHeader>
         <ModalContainer>
+          <WrapperCheckbox>
+            <CheckBox
+              value={toggleCheckBox}
+              onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            />
+            <LabelCheckbox>Minha residência</LabelCheckbox>
+          </WrapperCheckbox>
+
           <Input2
             onChangeText={(text) =>
               setServiceLocation({ ...serviceLocation, city: text })

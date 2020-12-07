@@ -25,6 +25,26 @@ export const Container = styled.View`
   flex: 1;
 `;
 
+export const ServiceLocation = styled.View`
+  margin-top: 20px;
+`;
+
+export const LabelCheckbox = styled.Text`
+  color: #4a4a4a;
+  font-size: 20px;
+  font-family: 'RobotoSlab-Medium';
+  line-height: 28px;
+`;
+
+export const WrapperCheckbox = styled.View`
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom-width: 1;
+  border-bottom-color: #000;
+`;
+
 export const Header = styled.View`
   padding: 24px;
   padding-top: ${getStatusBarHeight() + 24}px;
