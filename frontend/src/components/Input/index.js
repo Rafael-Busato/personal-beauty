@@ -4,6 +4,7 @@ import ReactInputMask from 'react-input-mask';
 import { useField } from '@unform/core';
 
 import { Container, Error } from './styles';
+import { promises } from 'dns';
 
 // interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 //   name: string;
@@ -11,8 +12,6 @@ import { Container, Error } from './styles';
 //   containerStyle?: object;
 //   icon: ComponentType<IconBaseProps>;
 // }
-
-
 
 const Input = ({
   name,
@@ -53,12 +52,11 @@ const Input = ({
     });
   }, [fieldName, registerField]);
 
-  function teste(um, dois, tres, quatro){
+  function teste(um, dois, tres, quatro) {
     console.log(um.target.value.length);
     console.log(dois);
     console.log(tres);
     console.log(quatro);
-
   }
 
   return (
@@ -71,9 +69,8 @@ const Input = ({
       {Icon && <Icon size={20} />}
       {hasMask ? (
         <ReactInputMask
-        
-        onChangeCapture={teste}
-        // beforeMaskedValueChange={teste}
+          onChangeCapture={teste}
+          // beforeMaskedValueChange={teste}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           defaultValue={defaultValue}

@@ -22,12 +22,6 @@ export default class CreateServicesTypes {
 
     const listServiceTypes = await ProviderServiceTypes.index();
 
-    // listServiceTypes.forEach(service => {
-    //   let parsed = JSON.parse(service.sub_service);
-
-    //   return (service.sub_service = parsed);
-    // });
-
     return response.json(listServiceTypes);
   }
 

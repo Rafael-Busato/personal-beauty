@@ -12,6 +12,7 @@ interface IRequest {
   provider_id: string;
   user_id: string;
   date: Date;
+  sub_service: object;
 }
 
 @injectable()
@@ -28,8 +29,8 @@ class CreateAppointmentService {
     date,
     provider_id,
     user_id,
+    sub_service,
   }: IRequest): Promise<Appointment> {
-    console.log('heressss', date);
     const appointmentDate = startOfHour(date);
 
     if (isBefore(appointmentDate, Date.now())) {
@@ -60,10 +61,8 @@ class CreateAppointmentService {
       user_id,
       date: addHours(new Date(appointmentDate), 3),
     });
-    console.log('appointmentDate', appointmentDate);
 
     const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
-    console.log('dateFormatted', dateFormatted);
 
     await this.notificationsRepository.create({
       recipient_id: provider_id,

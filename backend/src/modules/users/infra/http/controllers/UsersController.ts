@@ -7,13 +7,11 @@ export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const data = request.body;
 
-    console.log('service', data.serviceType);
-    console.log('sub', data.subService);
-
     const createUser = container.resolve(CreateUserService);
 
     let trueKeys, trueKeySubServices;
 
+    console.log(data);
     if (!!data.serviceType) {
       trueKeys = Object.keys(data.serviceType).filter(
         key => data.serviceType[key],
@@ -23,12 +21,18 @@ export default class UsersController {
     }
 
     if (!!data.subService) {
-      trueKeySubServices = Object.keys(data.subService).filter(
-        key => data.subService[key],
-      );
+      trueKeySubServices = Object.keys(data.subService).map((item, key) => {
+        console.log('abtes', item);
+        return {
+          service: item,
+          price: data.price[item],
+        };
+      });
     } else {
       trueKeySubServices = [];
     }
+
+    console.log(trueKeySubServices);
 
     const user = await createUser.execute({
       name: data.name,
@@ -49,10 +53,12 @@ export default class UsersController {
       fullname: data.fullname,
       service_type: trueKeys,
       sub_service: trueKeySubServices,
-      price: data.price || '',
+      price: data.price,
     });
 
     delete user.password;
+
+    console.log('criou');
 
     return response.json(user);
   }

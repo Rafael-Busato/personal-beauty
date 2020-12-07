@@ -9,6 +9,7 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Feather';
 import CheckBox from '@react-native-community/checkbox';
+import CheckBoxComponent from '../../components/CheckBox';
 import {
   Platform,
   Alert,
@@ -61,6 +62,7 @@ import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import { Provider } from '../Dashboard';
 import formatDate from '../../utils/formatDate';
+import { zhCN } from 'date-fns/locale';
 
 interface RouteParams {
   providerId: string;
@@ -94,14 +96,27 @@ const CreateAppointment: React.FC = () => {
     routeParams.providerId,
   );
 
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [services, setServices] = useState([]);
+
+  const [selectedSubService, setSelectedSubService] = useState({});
+
+  const [selectedItems, setSelectedItems] = useState([]);
+
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   useEffect(() => {
     api.get('providers').then((response) => setProviders(response.data));
   }, []);
 
   useEffect(() => {
-    console.log('providers', providers);
-  }, [providers]);
+    if (providers.length) {
+      const client = providers.find((item) => {
+        return item.id === selectedProvider;
+      });
+
+      setSelectedClient(client);
+    }
+  }, [selectedProvider, providers]);
 
   const navigateBack = useCallback(() => {
     navigation.goBack();
@@ -161,6 +176,23 @@ const CreateAppointment: React.FC = () => {
   const handleToggleDatePicker = useCallback(() => {
     setShowDateTimePicker((state) => !state);
   }, []);
+
+  const handleChangeSubService = (item) => {
+    const value = item.service;
+    const index = selectedItems.findIndex((x) => x.service === value);
+    if (index > -1) {
+      setSelectedItems = [
+        ...selectedItems.slice(0, index),
+        ...selectedItems.slice(index + 1),
+      ];
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
+  };
+
+  useEffect(() => {
+    console.log('selectedItems', selectedItems);
+  }, [selectedItems]);
 
   const handleDateChanged = useCallback(
     (event: any, date: Date | undefined) => {
@@ -226,7 +258,6 @@ const CreateAppointment: React.FC = () => {
 
     try {
       const date = new Date(selectedDate);
-      console.log('datee', date);
 
       date.setHours(selectedHour);
       date.setMinutes(0);
@@ -234,6 +265,7 @@ const CreateAppointment: React.FC = () => {
       await api.post('/appointments', {
         provider_id: selectedProvider,
         date,
+        selectedSubService,
       });
 
       navigation.navigate('AppointmentCreated', { date: date.getTime() });
@@ -267,6 +299,17 @@ const CreateAppointment: React.FC = () => {
   }, [navigation, selectedDate, selectedHour, selectedProvider]);
 
   const avatar = 'https://avatars2.githubusercontent.com/u/64861571?s=460&v=4';
+
+  useEffect(() => {
+    if (selectedClient) {
+      const subServices = selectedClient.sub_service;
+      const x = subServices.map((item) => {
+        return JSON.parse(item);
+      });
+
+      setServices(x);
+    }
+  }, [selectedClient]);
 
   return (
     <>
@@ -306,7 +349,8 @@ const CreateAppointment: React.FC = () => {
 
             <OpenDatePickerButton onPress={handleToggleDatePicker}>
               <OpenDatePickerText>
-                Selecionar outra data | data atual: {selectedDate.getDate()}
+                Selecionar outra data | data atual: {selectedDate.getDate()}/
+                {selectedDate.getMonth() + 1}
               </OpenDatePickerText>
             </OpenDatePickerButton>
             {showDatePicker && (
@@ -391,6 +435,33 @@ const CreateAppointment: React.FC = () => {
               </SectionContent>
             </Section>
           </Schedule>
+
+          <Section>
+            <Title>Escolha o serviço</Title>
+
+            <SectionContent>
+              <View style={{ display: 'flex', flexDirection: 'column' }}>
+                {services.map((item, index) => {
+                  return (
+                    <View key={index}>
+                      <LabelCheckbox>{item.service}</LabelCheckbox>
+                      <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                      >
+                        <CheckBox
+                          value={selectedItems[item.service]}
+                          onValueChange={() => handleChangeSubService(item)}
+                        />
+                        <Text style={{ color: '#FFF', marginLeft: 15 }}>
+                          R$ {item.price}
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            </SectionContent>
+          </Section>
 
           <CreateAppointmentButton onPress={handleCreateAppointment}>
             <CreateAppointmentButtonText>

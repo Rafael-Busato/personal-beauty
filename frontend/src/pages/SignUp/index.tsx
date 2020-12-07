@@ -42,7 +42,7 @@ interface SignUpFormData {
   city: string;
   email: string;
   password: string;
-
+  price: object;
   bank: string;
   phone: string;
   occupation: string;
@@ -72,6 +72,8 @@ const SignUp: React.FC = () => {
   const [listServiceType, setListServiceType] = useState<ListServiceType[]>([]);
   const [subService, setSubService] = useState();
 
+  const [price, setPrice] = useState();
+
   const [serviceType, setServiceType] = useState();
 
   const [formData, setFormData] = useState<SignUpFormData>({
@@ -89,6 +91,7 @@ const SignUp: React.FC = () => {
     number: '',
     agency: '',
     account: '',
+    price: {},
     document: '',
     fullname: '',
     serviceType: {},
@@ -103,6 +106,13 @@ const SignUp: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleChangePrice = (event: any, value: string) => {
+    setPrice({
+      ...price,
+      [value]: event.target.value,
+    });
+  };
+
   const handleChangeServiceType = (event: any, service_type: string) => {
     setServiceType({
       ...serviceType,
@@ -110,6 +120,7 @@ const SignUp: React.FC = () => {
     });
   };
 
+  console.log('HDSDHSOHA', price);
   const handleChangeSubService = (event: any, sub_services: string) => {
     setSubService({
       ...subService,
@@ -153,8 +164,10 @@ const SignUp: React.FC = () => {
       }
 
       if (activeStep === 3) {
+        console.log(formData.price);
         formData.serviceType = serviceType;
         formData.subService = subService;
+        formData.price = price;
         try {
           formRef.current?.setErrors({});
 
@@ -183,9 +196,10 @@ const SignUp: React.FC = () => {
             abortEarly: false,
           });
 
+          console.log(formData);
           await api.post('/users', formData);
 
-          history.push('/');
+          // history.push('/');
           addToast({
             type: 'success',
             title: 'Cadastro realizado!',
@@ -206,7 +220,7 @@ const SignUp: React.FC = () => {
         }
       }
     },
-    [addToast, history, formData, serviceType, subService, activeStep],
+    [addToast, history, formData, serviceType, subService, activeStep, price],
   );
 
   return (
@@ -349,8 +363,17 @@ const SignUp: React.FC = () => {
                                 {!!subService && subService[item.sub_services] && (
                                   <div>
                                     <Input
-                                      name="price"
+                                      name={`price[${item.sub_services}]`}
+                                      value={
+                                        !!price && price[item.sub_services]
+                                      }
                                       type="number"
+                                      onChange={(event: any) =>
+                                        handleChangePrice(
+                                          event,
+                                          item.sub_services,
+                                        )
+                                      }
                                       icon={FiUser}
                                       placeholder="Preço do serviço"
                                     />
