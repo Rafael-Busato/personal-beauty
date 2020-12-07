@@ -241,6 +241,7 @@ const CreateAppointment: React.FC = () => {
         },
       })
       .then((response) => {
+        console.log('responseeeeeeeeee', response);
         setAvailability(response.data);
         setSelectedHour(0);
       });
@@ -256,6 +257,8 @@ const CreateAppointment: React.FC = () => {
       return;
     }
 
+    console.log('selectedItem', selectedItems);
+
     try {
       const date = new Date(selectedDate);
 
@@ -265,7 +268,7 @@ const CreateAppointment: React.FC = () => {
       await api.post('/appointments', {
         provider_id: selectedProvider,
         date,
-        selectedSubService,
+        service: selectedItems,
       });
 
       navigation.navigate('AppointmentCreated', { date: date.getTime() });

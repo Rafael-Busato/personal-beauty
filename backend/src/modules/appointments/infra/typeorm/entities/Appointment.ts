@@ -33,8 +33,8 @@ class Appointment {
   @Column('timestamp with time zone')
   date: Date;
 
-  @Column()
-  service: object;
+  @Column({ array: true })
+  service: string;
 
   @CreateDateColumn()
   created_at: Date;

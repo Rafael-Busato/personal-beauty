@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { FiMail, FiUser, FiLock, FiArrowLeft } from 'react-icons/fi';
+import axios from 'axios';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -57,6 +58,7 @@ interface SignUpFormData {
   fullname: string;
   serviceType: object;
   subService: object;
+  mobile: boolean;
 }
 
 const SignUp: React.FC = () => {
@@ -76,6 +78,11 @@ const SignUp: React.FC = () => {
 
   const [serviceType, setServiceType] = useState();
 
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [rua, setRua] = useState('');
+
   const [formData, setFormData] = useState<SignUpFormData>({
     name: '',
     email: '',
@@ -93,6 +100,7 @@ const SignUp: React.FC = () => {
     account: '',
     price: {},
     document: '',
+    mobile: false,
     fullname: '',
     serviceType: {},
     subService: {},
@@ -120,12 +128,28 @@ const SignUp: React.FC = () => {
     });
   };
 
-  console.log('HDSDHSOHA', price);
   const handleChangeSubService = (event: any, sub_services: string) => {
     setSubService({
       ...subService,
       [sub_services]: event.target.checked,
     });
+  };
+
+  const handleAddress = (event: any) => {
+    const cep = event.target.value;
+
+    axios
+      .get(`https://viacep.com.br/ws/${cep}/json/`)
+      .then((response) => {
+        console.log('response', response);
+        setEstado(response.data.uf);
+        setCidade(response.data.localidade);
+        setBairro(response.data.bairro);
+        setRua(response.data.logradouro);
+      })
+      .catch((err) => {
+        console.log('erro', err);
+      });
   };
 
   const handleChangeVerifyCPF = useCallback(
@@ -164,10 +188,10 @@ const SignUp: React.FC = () => {
       }
 
       if (activeStep === 3) {
-        console.log(formData.price);
         formData.serviceType = serviceType;
         formData.subService = subService;
         formData.price = price;
+        data.mobile = false;
         try {
           formRef.current?.setErrors({});
 
@@ -196,10 +220,9 @@ const SignUp: React.FC = () => {
             abortEarly: false,
           });
 
-          console.log(formData);
           await api.post('/users', formData);
 
-          // history.push('/');
+          history.push('/');
           addToast({
             type: 'success',
             title: 'Cadastro realizado!',
@@ -275,11 +298,32 @@ const SignUp: React.FC = () => {
                   placeholder="CEP"
                   hasMask
                   mask="99999-999"
+                  onBlur={handleAddress}
                 />
-                <Input name="state" icon={FiUser} placeholder="Estado" />
-                <Input name="city" icon={FiUser} placeholder="Cidade" />
-                <Input name="neighborhood" icon={FiUser} placeholder="Bairro" />
-                <Input name="address" icon={FiUser} placeholder="Rua" />
+                <Input
+                  name="state"
+                  value={estado}
+                  icon={FiUser}
+                  placeholder="Estado"
+                />
+                <Input
+                  name="city"
+                  value={cidade}
+                  icon={FiUser}
+                  placeholder="Cidade"
+                />
+                <Input
+                  name="neighborhood"
+                  value={bairro}
+                  icon={FiUser}
+                  placeholder="Bairro"
+                />
+                <Input
+                  name="address"
+                  value={rua}
+                  icon={FiUser}
+                  placeholder="Rua"
+                />
                 <Input name="number" icon={FiUser} placeholder="Número" />
               </>
             )}

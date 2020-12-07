@@ -39,6 +39,8 @@ interface SignUpFormData {
   email: string;
   password: string;
   occupation: string;
+  zipCode: string;
+  mobile: boolean;
 }
 
 const SignUp: React.FC = () => {
@@ -46,6 +48,10 @@ const SignUp: React.FC = () => {
   const navigation = useNavigation();
   const [cep, setCEP] = useState('');
   const [phone, setPhone] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [rua, setRua] = useState('');
 
   const emailInputRef = useRef<TextInput>(null);
   const cityInputRef = useRef<TextInput>(null);
@@ -53,7 +59,7 @@ const SignUp: React.FC = () => {
 
   const handleSignUp = useCallback(
     async (data: SignUpFormData) => {
-      console.log('data', data);
+      console.log('DATA DECILIO', data);
       try {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
@@ -69,11 +75,15 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
+        data.mobile = true;
+
+        data.zipCode = cep;
+
         data.occupation = 'cliente';
         delete data.a;
-        delete data.cep;
+        // delete data.cep;
 
-        console.log('data', data);
+        console.log('dECILIO', data);
         await api.post('/users', data);
 
         Alert.alert('Cadastro realizado', 'Você já pode realizar o login');
@@ -95,7 +105,7 @@ const SignUp: React.FC = () => {
         );
       }
     },
-    [navigation],
+    [navigation, cep],
   );
 
   return (
@@ -186,7 +196,7 @@ const SignUp: React.FC = () => {
               <Input
                 ref={cityInputRef}
                 autoCapitalize="words"
-                name="cep"
+                name="zipCode"
                 icon="map-pin"
                 placeholder="CEP"
                 onChangeText={(text) => setCEP(formatCEP(text))}

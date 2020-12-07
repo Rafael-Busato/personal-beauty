@@ -7,11 +7,43 @@ export default class UsersController {
   public async create(request: Request, response: Response): Promise<Response> {
     const data = request.body;
 
+    console.log(data);
+
     const createUser = container.resolve(CreateUserService);
 
+    if (data.mobile === true) {
+      console.log('ola', data);
+      try {
+        const user = await createUser.execute({
+          name: data.name,
+          city: data.city,
+          email: data.email,
+          password: data.password,
+          bank: '',
+          phone: '',
+          occupation: data.occupation,
+          zipCode: data.zipCode,
+          neighborhood: '',
+          state: '',
+          address: '',
+          number: '',
+          agency: '',
+          account: '',
+          document: '',
+          fullname: '',
+          service_type: [],
+          sub_service: [],
+          price: '',
+        });
+      } catch (err) {
+        console.log('here', err);
+      }
+
+      console.log('chegou aqui');
+      return response.json(user);
+    }
     let trueKeys, trueKeySubServices;
 
-    console.log(data);
     if (!!data.serviceType) {
       trueKeys = Object.keys(data.serviceType).filter(
         key => data.serviceType[key],
@@ -20,9 +52,10 @@ export default class UsersController {
       trueKeys = [];
     }
 
+    console.log('PAROU AQUI');
+
     if (!!data.subService) {
       trueKeySubServices = Object.keys(data.subService).map((item, key) => {
-        console.log('abtes', item);
         return {
           service: item,
           price: data.price[item],
@@ -32,8 +65,7 @@ export default class UsersController {
       trueKeySubServices = [];
     }
 
-    console.log(trueKeySubServices);
-
+    console.log('here');
     const user = await createUser.execute({
       name: data.name,
       city: data.city,
@@ -53,12 +85,10 @@ export default class UsersController {
       fullname: data.fullname,
       service_type: trueKeys,
       sub_service: trueKeySubServices,
-      price: data.price,
+      price: data.price || '',
     });
 
     delete user.password;
-
-    console.log('criou');
 
     return response.json(user);
   }
