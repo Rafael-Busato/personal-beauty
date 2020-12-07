@@ -24,6 +24,11 @@ export default class CreateAppointments1597763812973
             isNullable: false,
           },
           {
+            name: 'service',
+            type: 'varChar',
+            isArray: true
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'now()',

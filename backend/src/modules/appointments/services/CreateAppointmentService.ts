@@ -60,6 +60,7 @@ class CreateAppointmentService {
       provider_id,
       user_id,
       date: addHours(new Date(appointmentDate), 3),
+      service: sub_service,
     });
 
     const dateFormatted = format(appointmentDate, "dd/MM/yyyy 'às' HH:mm'h'");
