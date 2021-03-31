@@ -268,7 +268,7 @@ const CreateAppointment: React.FC = () => {
       await api.post('/appointments', {
         provider_id: selectedProvider,
         date,
-        service: selectedItems,
+        // service: selectedItems,
       });
 
       navigation.navigate('AppointmentCreated', { date: date.getTime() });

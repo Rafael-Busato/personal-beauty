@@ -213,6 +213,7 @@ const Dashboard: React.FC = () => {
                 inputAndroid: { color: '#232129' },
               }}
               items={[
+                { label: 'Nenhum', value: 'nenhum' },
                 { label: 'Americana', value: 'americana' },
                 { label: 'Campinas', value: 'campinas' },
                 { label: 'Cosmópolis', value: 'cosmópolis' },
